@@ -42,6 +42,7 @@ abstract class AbstractCIDRNotation<A extends InetAddress> implements CIDRNotati
 
         /**
          * Retrieves the base address.
+         *
          * @return the address.
          */
         @Nonnull
@@ -52,6 +53,7 @@ abstract class AbstractCIDRNotation<A extends InetAddress> implements CIDRNotati
 
         /**
          * Retrieves a mutated CIDR notation with the base of {@code base}.
+         *
          * @param base the base.
          * @return the notation.
          */
@@ -164,5 +166,44 @@ abstract class AbstractCIDRNotation<A extends InetAddress> implements CIDRNotati
         @Override
         public int prefixLength () {
                 return this.prefixLength;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public boolean equals (Object object) {
+                if (this == object) {
+                        return true;
+                }
+                if (object == null || getClass () != object.getClass ()) {
+                        return false;
+                }
+
+                AbstractCIDRNotation<?> that = (AbstractCIDRNotation<?>) object;
+
+                if (prefixLength != that.prefixLength) {
+                        return false;
+                }
+                return base.equals (that.base);
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public int hashCode () {
+                int result = base.hashCode ();
+                result = 31 * result + prefixLength;
+                return result;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Nonnull
+        @Override
+        public String toString () {
+                return this.base ().getHostAddress () + "/" + this.prefixLength ();
         }
 }
