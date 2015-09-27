@@ -45,6 +45,7 @@ abstract class AbstractCIDRNotation<A extends InetAddress> implements CIDRNotati
          * @return the address.
          */
         @Nonnull
+        @Override
         public A base () {
                 return this.base;
         }
