@@ -39,7 +39,7 @@ When running maven you may simply add a new dependency along with our repository
         <dependency>
                 <groupId>com.torchmind.utility</groupId>
                 <artifactId>cidr</artifactId>
-                <version>2.0-SNAPSHOT</version>
+                <version>2.0-SNAPSHOT.1</version>
         </dependency>
 </dependencies>
 ```
