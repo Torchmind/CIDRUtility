@@ -44,6 +44,14 @@ public interface CIDRNotation {
         InetAddress base ();
 
         /**
+         * Retrieves the amount of addresses within the block.
+         *
+         * @return the size.
+         */
+        @Nonnegative
+        long blockSize ();
+
+        /**
          * Retrieves a binary encoded CIDRNotation mask.
          *
          * @return the bytes.

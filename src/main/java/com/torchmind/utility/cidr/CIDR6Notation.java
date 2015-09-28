@@ -43,6 +43,14 @@ public final class CIDR6Notation extends AbstractCIDRNotation<Inet6Address> {
         /**
          * {@inheritDoc}
          */
+        @Override
+        public long blockSize () {
+                return ((long) Math.pow (2, (64 - this.prefixLength ())));
+        }
+
+        /**
+         * {@inheritDoc}
+         */
         @Nonnull
         @Override
         public byte[] encoded () {
