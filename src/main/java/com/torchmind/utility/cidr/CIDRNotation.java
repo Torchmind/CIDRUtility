@@ -125,12 +125,12 @@ public interface CIDRNotation {
         @Nonnull
         static CIDRNotation of (@Nonnull String address) throws IllegalArgumentException, UnknownHostException {
                 int lengthOffset = address.indexOf ('/');
-                if (lengthOffset == -1) {
-                        throw new IllegalArgumentException ("Missing prefix length");
-                }
 
-                int prefixLength = Integer.parseUnsignedInt (address.substring ((lengthOffset + 1)));
-                address = address.substring (0, lengthOffset);
+                int prefixLength = -1;
+                if (lengthOffset != -1) {
+                        prefixLength = Integer.parseUnsignedInt (address.substring ((lengthOffset + 1)));
+                        address = address.substring (0, lengthOffset);
+                }
 
                 return of (address, prefixLength);
         }
@@ -180,6 +180,10 @@ public interface CIDRNotation {
          */
         @Nonnull
         static CIDR4Notation of (@Nonnull Inet4Address address, @Nonnegative int prefixLength) {
+                if (prefixLength == -1) {
+                        prefixLength = 32;
+                }
+
                 return (new CIDR4Notation (address, prefixLength));
         }
 
@@ -192,6 +196,10 @@ public interface CIDRNotation {
          */
         @Nonnull
         static CIDR6Notation of (@Nonnull Inet6Address address, @Nonnegative int prefixLength) {
+                if (prefixLength == -1) {
+                        prefixLength = 64;
+                }
+
                 return (new CIDR6Notation (address, prefixLength));
         }
 
