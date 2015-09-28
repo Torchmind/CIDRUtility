@@ -38,6 +38,15 @@ abstract class AbstractCIDRNotation<A extends InetAddress> implements CIDRNotati
         protected AbstractCIDRNotation (@Nonnull A base, @Nonnegative int prefixLength) {
                 this.base = base;
                 this.prefixLength = prefixLength;
+
+                byte[] encoded = base.getAddress ();
+                byte[] mask = this.encoded ();
+
+                for (int i = 0; i < mask.length; i++) {
+                        if ((encoded[i] & (~mask[i])) != 0x0) {
+                                throw new IllegalArgumentException ("Invalid CIDR mask: Base address is not part of block");
+                        }
+                }
         }
 
         /**

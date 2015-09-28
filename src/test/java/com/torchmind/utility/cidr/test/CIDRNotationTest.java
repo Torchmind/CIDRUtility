@@ -26,6 +26,9 @@ import org.mockito.runners.MockitoJUnitRunner;
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 /**
  * Provides test cases for {@link com.torchmind.utility.cidr.CIDRNotation} and all of it's implementations.
@@ -34,6 +37,100 @@ import java.net.UnknownHostException;
  */
 @RunWith (MockitoJUnitRunner.class)
 public class CIDRNotationTest {
+
+        /**
+         * Tests whether {@link com.torchmind.utility.cidr.AbstractCIDRNotation#AbstractCIDRNotation(java.net.InetAddress, int)}
+         * verifies passed masks correctly.
+         */
+        @Test
+        public void testBaseVerification () throws UnknownHostException {
+                BiConsumer<String, Boolean> verify = (m, b) -> {
+                        try {
+
+                                if (!b) {
+                                        try {
+                                                CIDRNotation.of (m);
+                                                throw new AssertionError ("Expected IllegalArgumentException due to invalid mask specification: " + m);
+                                        } catch (IllegalArgumentException ignore) {
+                                        }
+
+                                        return;
+                                }
+
+                                CIDRNotation.of (m);
+                        } catch (UnknownHostException ex) {
+                                throw new AssertionError ("Unexpected exception: " + ex.getMessage (), ex);
+                        }
+                };
+
+                Function<Integer, String> address = (i) -> ((i & 0xFF000000) >>> 24) + "." + ((i & 0x00FF0000) >>> 16) + "." + ((i & 0x0000FF00) >>> 8) + "." + (i & 0x000000FF);
+
+                Consumer<Integer> a = (m) -> {
+                        int number = 0x0;
+                        for (int i = 0; i < (32 - m); i++) {
+                                number |= (0x1 << i);
+
+                                verify.accept (address.apply (number) + "/" + m, false);
+                        }
+
+                        number = 0x0;
+                        for (int i = -1; i < m; i++) {
+                                if (i != -1) {
+                                        number |= (0x80000000L >>> i);
+                                }
+
+                                verify.accept (address.apply (number) + "/" + m, true);
+                        }
+                };
+
+                for (int i = 0; i < 32; i++) {
+                        a.accept (i);
+                }
+        }
+
+        /**
+         * Tests {@link com.torchmind.utility.cidr.CIDRNotation#blockSize()}.
+         */
+        @Test
+        public void testBlockSize () throws UnknownHostException {
+                Assert.assertEquals (4294967296L, CIDRNotation.of ("0.0.0.0/0").blockSize ());
+
+                Assert.assertEquals (2147483648L, CIDRNotation.of ("128.0.0.0/1").blockSize ());
+                Assert.assertEquals (1073741824L, CIDRNotation.of ("192.0.0.0/2").blockSize ());
+                Assert.assertEquals (536870912L, CIDRNotation.of ("224.0.0.0/3").blockSize ());
+                Assert.assertEquals (268435456L, CIDRNotation.of ("240.0.0.0/4").blockSize ());
+                Assert.assertEquals (134217728L, CIDRNotation.of ("248.0.0.0/5").blockSize ());
+                Assert.assertEquals (67108864L, CIDRNotation.of ("252.0.0.0/6").blockSize ());
+                Assert.assertEquals (33554432L, CIDRNotation.of ("254.0.0.0/7").blockSize ());
+                Assert.assertEquals (16777216L, CIDRNotation.of ("255.0.0.0/8").blockSize ());
+
+                Assert.assertEquals (8388608L, CIDRNotation.of ("255.128.0.0/9").blockSize ());
+                Assert.assertEquals (4194304L, CIDRNotation.of ("255.192.0.0/10").blockSize ());
+                Assert.assertEquals (2097152L, CIDRNotation.of ("255.224.0.0/11").blockSize ());
+                Assert.assertEquals (1048576L, CIDRNotation.of ("255.240.0.0/12").blockSize ());
+                Assert.assertEquals (524288L, CIDRNotation.of ("255.248.0.0/13").blockSize ());
+                Assert.assertEquals (262144L, CIDRNotation.of ("255.252.0.0/14").blockSize ());
+                Assert.assertEquals (131072L, CIDRNotation.of ("255.254.0.0/15").blockSize ());
+                Assert.assertEquals (65536L, CIDRNotation.of ("255.255.0.0/16").blockSize ());
+
+                Assert.assertEquals (32768L, CIDRNotation.of ("255.255.128.0/17").blockSize ());
+                Assert.assertEquals (16384L, CIDRNotation.of ("255.255.192.0/18").blockSize ());
+                Assert.assertEquals (8192L, CIDRNotation.of ("255.255.224.0/19").blockSize ());
+                Assert.assertEquals (4096L, CIDRNotation.of ("255.255.240.0/20").blockSize ());
+                Assert.assertEquals (2048L, CIDRNotation.of ("255.255.248.0/21").blockSize ());
+                Assert.assertEquals (1024L, CIDRNotation.of ("255.255.252.0/22").blockSize ());
+                Assert.assertEquals (512L, CIDRNotation.of ("255.255.254.0/23").blockSize ());
+                Assert.assertEquals (256L, CIDRNotation.of ("255.255.255.0/24").blockSize ());
+
+                Assert.assertEquals (128L, CIDRNotation.of ("255.255.255.128/25").blockSize ());
+                Assert.assertEquals (64L, CIDRNotation.of ("255.255.255.192/26").blockSize ());
+                Assert.assertEquals (32L, CIDRNotation.of ("255.255.255.224/27").blockSize ());
+                Assert.assertEquals (16L, CIDRNotation.of ("255.255.255.240/28").blockSize ());
+                Assert.assertEquals (8L, CIDRNotation.of ("255.255.255.248/29").blockSize ());
+                Assert.assertEquals (4L, CIDRNotation.of ("255.255.255.252/30").blockSize ());
+                Assert.assertEquals (2L, CIDRNotation.of ("255.255.255.254/31").blockSize ());
+                Assert.assertEquals (1L, CIDRNotation.of ("255.255.255.255/32").blockSize ());
+        }
 
         /**
          * Tests {@link com.torchmind.utility.cidr.CIDRNotation#equals(Object)}.
@@ -395,49 +492,5 @@ public class CIDRNotationTest {
                 Assert.assertEquals ("10.10.10.0/24", CIDRNotation.of ("10.10.10.0/24").toString ());
                 Assert.assertEquals ("10.10.10.10/32", CIDRNotation.of ("10.10.10.10/32").toString ());
                 Assert.assertEquals ("127.0.0.0/31", CIDRNotation.of ("127.0.0.0/31").toString ());
-        }
-
-        /**
-         * Tests {@link com.torchmind.utility.cidr.CIDRNotation#blockSize()}.
-         */
-        @Test
-        public void testBlockSize () throws UnknownHostException {
-                Assert.assertEquals (4294967296L, CIDRNotation.of ("0.0.0.0/0").blockSize ());
-
-                Assert.assertEquals (2147483648L, CIDRNotation.of ("128.0.0.0/1").blockSize ());
-                Assert.assertEquals (1073741824L, CIDRNotation.of ("192.0.0.0/2").blockSize ());
-                Assert.assertEquals (536870912L, CIDRNotation.of ("224.0.0.0/3").blockSize ());
-                Assert.assertEquals (268435456L, CIDRNotation.of ("240.0.0.0/4").blockSize ());
-                Assert.assertEquals (134217728L, CIDRNotation.of ("248.0.0.0/5").blockSize ());
-                Assert.assertEquals (67108864L, CIDRNotation.of ("252.0.0.0/6").blockSize ());
-                Assert.assertEquals (33554432L, CIDRNotation.of ("254.0.0.0/7").blockSize ());
-                Assert.assertEquals (16777216L, CIDRNotation.of ("255.0.0.0/8").blockSize ());
-
-                Assert.assertEquals (8388608L, CIDRNotation.of ("255.128.0.0/9").blockSize ());
-                Assert.assertEquals (4194304L, CIDRNotation.of ("255.192.0.0/10").blockSize ());
-                Assert.assertEquals (2097152L, CIDRNotation.of ("255.224.0.0/11").blockSize ());
-                Assert.assertEquals (1048576L, CIDRNotation.of ("255.240.0.0/12").blockSize ());
-                Assert.assertEquals (524288L, CIDRNotation.of ("255.248.0.0/13").blockSize ());
-                Assert.assertEquals (262144L, CIDRNotation.of ("255.252.0.0/14").blockSize ());
-                Assert.assertEquals (131072L, CIDRNotation.of ("255.254.0.0/15").blockSize ());
-                Assert.assertEquals (65536L, CIDRNotation.of ("255.255.0.0/16").blockSize ());
-
-                Assert.assertEquals (32768L, CIDRNotation.of ("255.255.128.0/17").blockSize ());
-                Assert.assertEquals (16384L, CIDRNotation.of ("255.255.192.0/18").blockSize ());
-                Assert.assertEquals (8192L, CIDRNotation.of ("255.255.224.0/19").blockSize ());
-                Assert.assertEquals (4096L, CIDRNotation.of ("255.255.240.0/20").blockSize ());
-                Assert.assertEquals (2048L, CIDRNotation.of ("255.255.248.0/21").blockSize ());
-                Assert.assertEquals (1024L, CIDRNotation.of ("255.255.252.0/22").blockSize ());
-                Assert.assertEquals (512L, CIDRNotation.of ("255.255.254.0/23").blockSize ());
-                Assert.assertEquals (256L, CIDRNotation.of ("255.255.255.0/24").blockSize ());
-
-                Assert.assertEquals (128L, CIDRNotation.of ("255.255.255.128/25").blockSize ());
-                Assert.assertEquals (64L, CIDRNotation.of ("255.255.255.192/26").blockSize ());
-                Assert.assertEquals (32L, CIDRNotation.of ("255.255.255.224/27").blockSize ());
-                Assert.assertEquals (16L, CIDRNotation.of ("255.255.255.240/28").blockSize ());
-                Assert.assertEquals (8L, CIDRNotation.of ("255.255.255.248/29").blockSize ());
-                Assert.assertEquals (4L, CIDRNotation.of ("255.255.255.252/30").blockSize ());
-                Assert.assertEquals (2L, CIDRNotation.of ("255.255.255.254/31").blockSize ());
-                Assert.assertEquals (1L, CIDRNotation.of ("255.255.255.255/32").blockSize ());
         }
 }
