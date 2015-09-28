@@ -127,7 +127,7 @@ public interface CIDRNotation {
          * @param address The address.
          * @return the notation.
          *
-         * @throws java.lang.IllegalArgumentException when the prefix is invalid or missing.
+         * @throws java.lang.IllegalArgumentException when the mask is invalid.
          * @throws java.net.UnknownHostException      when the system cannot find the address.
          */
         @Nonnull
@@ -150,7 +150,7 @@ public interface CIDRNotation {
          * @param prefixLength the prefix length.
          * @return the notation.
          *
-         * @throws java.lang.IllegalArgumentException when the address type or address is invalid.
+         * @throws java.lang.IllegalArgumentException when the address type, address or resulting mask is invalid.
          * @throws java.net.UnknownHostException      when the passed address cannot be resolved.
          */
         @Nonnull
@@ -165,7 +165,7 @@ public interface CIDRNotation {
          * @param prefixLength the prefix length.
          * @return the notation.
          *
-         * @throws java.lang.IllegalArgumentException when the address type is invalid.
+         * @throws java.lang.IllegalArgumentException when the address type or resulting mask is invalid.
          */
         @Nonnull
         static CIDRNotation of (@Nonnull InetAddress address, @Nonnegative int prefixLength) throws IllegalArgumentException {
@@ -185,6 +185,8 @@ public interface CIDRNotation {
          * @param address      the address.
          * @param prefixLength the prefix length.
          * @return the notation.
+         *
+         * @throws java.lang.IllegalArgumentException when the resulting mask is invalid.
          */
         @Nonnull
         static CIDR4Notation of (@Nonnull Inet4Address address, @Nonnegative int prefixLength) {
@@ -201,6 +203,8 @@ public interface CIDRNotation {
          * @param address      the address.
          * @param prefixLength the prefix length.
          * @return the notation.
+         *
+         * @throws java.lang.IllegalArgumentException when the resulting mask is invalid.
          */
         @Nonnull
         static CIDR6Notation of (@Nonnull Inet6Address address, @Nonnegative int prefixLength) {
