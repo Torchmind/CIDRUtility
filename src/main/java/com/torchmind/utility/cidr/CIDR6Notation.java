@@ -16,53 +16,54 @@
  */
 package com.torchmind.utility.cidr;
 
+import java.net.Inet6Address;
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
-import java.net.Inet6Address;
 
 /**
- * Provides an {@link java.net.Inet6Address} based {@link com.torchmind.utility.cidr.CIDRNotation} implementation.
+ * Provides an {@link java.net.Inet6Address} based {@link com.torchmind.utility.cidr.CIDRNotation}
+ * implementation.
  *
  * @author Johannes Donath
  */
 public final class CIDR6Notation extends AbstractCIDRNotation<Inet6Address> {
 
-        protected CIDR6Notation (@Nonnull Inet6Address base, @Nonnegative int prefixLength) {
-                super (base, prefixLength);
-        }
+  protected CIDR6Notation(@Nonnull Inet6Address base, @Nonnegative int prefixLength) {
+    super(base, prefixLength);
+  }
 
-        /**
-         * {@inheritDoc}
-         */
-        @Nonnull
-        @Override
-        public CIDRNotation base (@Nonnull Inet6Address base) {
-                return (new CIDR6Notation (base, this.prefixLength ()));
-        }
+  /**
+   * {@inheritDoc}
+   */
+  @Nonnull
+  @Override
+  public CIDRNotation base(@Nonnull Inet6Address base) {
+    return (new CIDR6Notation(base, this.prefixLength()));
+  }
 
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public long blockSize () {
-                return ((long) Math.pow (2, (64 - this.prefixLength ())));
-        }
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public long blockSize() {
+    return ((long) Math.pow(2, (64 - this.prefixLength())));
+  }
 
-        /**
-         * {@inheritDoc}
-         */
-        @Nonnull
-        @Override
-        public byte[] encoded () {
-                return this.encoded (8);
-        }
+  /**
+   * {@inheritDoc}
+   */
+  @Nonnull
+  @Override
+  public byte[] encoded() {
+    return this.encoded(8);
+  }
 
-        /**
-         * {@inheritDoc}
-         */
-        @Nonnull
-        @Override
-        public CIDRNotation prefixLength (@Nonnegative int prefixLength) {
-                return (new CIDR6Notation (this.base (), prefixLength));
-        }
+  /**
+   * {@inheritDoc}
+   */
+  @Nonnull
+  @Override
+  public CIDRNotation prefixLength(@Nonnegative int prefixLength) {
+    return (new CIDR6Notation(this.base(), prefixLength));
+  }
 }

@@ -16,9 +16,9 @@
  */
 package com.torchmind.utility.cidr;
 
+import java.net.Inet4Address;
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
-import java.net.Inet4Address;
 
 /**
  * Provides an {@link java.net.Inet4Address} based CIDR notation.
@@ -27,42 +27,42 @@ import java.net.Inet4Address;
  */
 public final class CIDR4Notation extends AbstractCIDRNotation<Inet4Address> {
 
-        protected CIDR4Notation (@Nonnull Inet4Address base, @Nonnegative int prefixLength) {
-                super (base, prefixLength);
-        }
+  protected CIDR4Notation(@Nonnull Inet4Address base, @Nonnegative int prefixLength) {
+    super(base, prefixLength);
+  }
 
-        /**
-         * {@inheritDoc}
-         */
-        @Nonnull
-        @Override
-        public CIDRNotation base (@Nonnull Inet4Address base) {
-                return (new CIDR4Notation (base, this.prefixLength ()));
-        }
+  /**
+   * {@inheritDoc}
+   */
+  @Nonnull
+  @Override
+  public CIDRNotation base(@Nonnull Inet4Address base) {
+    return (new CIDR4Notation(base, this.prefixLength()));
+  }
 
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public long blockSize () {
-                return ((long) Math.pow (2, (32 - this.prefixLength ())));
-        }
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public long blockSize() {
+    return ((long) Math.pow(2, (32 - this.prefixLength())));
+  }
 
-        /**
-         * {@inheritDoc}
-         */
-        @Nonnull
-        @Override
-        public byte[] encoded () {
-                return this.encoded (4);
-        }
+  /**
+   * {@inheritDoc}
+   */
+  @Nonnull
+  @Override
+  public byte[] encoded() {
+    return this.encoded(4);
+  }
 
-        /**
-         * {@inheritDoc}
-         */
-        @Nonnull
-        @Override
-        public CIDRNotation prefixLength (@Nonnegative int prefixLength) {
-                return (new CIDR4Notation (this.base (), prefixLength));
-        }
+  /**
+   * {@inheritDoc}
+   */
+  @Nonnull
+  @Override
+  public CIDRNotation prefixLength(@Nonnegative int prefixLength) {
+    return (new CIDR4Notation(this.base(), prefixLength));
+  }
 }

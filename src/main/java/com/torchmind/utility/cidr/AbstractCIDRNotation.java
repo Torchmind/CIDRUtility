@@ -16,14 +16,14 @@
  */
 package com.torchmind.utility.cidr;
 
-import javax.annotation.Nonnegative;
-import javax.annotation.Nonnull;
-import javax.annotation.concurrent.ThreadSafe;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Set;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
+import javax.annotation.Nonnegative;
+import javax.annotation.Nonnull;
+import javax.annotation.concurrent.ThreadSafe;
 
 /**
  * Provides an abstract implementation of {@link com.torchmind.utility.cidr.CIDRNotation}.
@@ -32,187 +32,192 @@ import java.util.stream.Collectors;
  */
 @ThreadSafe
 abstract class AbstractCIDRNotation<A extends InetAddress> implements CIDRNotation {
-        private final A base;
-        private final int prefixLength;
 
-        protected AbstractCIDRNotation (@Nonnull A base, @Nonnegative int prefixLength) {
-                this.base = base;
-                this.prefixLength = prefixLength;
+  private final A base;
+  private final int prefixLength;
 
-                byte[] encoded = base.getAddress ();
-                byte[] mask = this.encoded ();
+  protected AbstractCIDRNotation(@Nonnull A base, @Nonnegative int prefixLength) {
+    this.base = base;
+    this.prefixLength = prefixLength;
 
-                for (int i = 0; i < mask.length; i++) {
-                        if ((encoded[i] & (~mask[i])) != 0x0) {
-                                throw new IllegalArgumentException ("Invalid CIDR mask: Base address is not part of block");
-                        }
-                }
-        }
+    byte[] encoded = base.getAddress();
+    byte[] mask = this.encoded();
 
-        /**
-         * Retrieves the base address.
-         *
-         * @return the address.
-         */
-        @Nonnull
-        @Override
-        public A base () {
-                return this.base;
-        }
+    for (int i = 0; i < mask.length; i++) {
+      if ((encoded[i] & (~mask[i])) != 0x0) {
+        throw new IllegalArgumentException("Invalid CIDR mask: Base address is not part of block");
+      }
+    }
+  }
 
-        /**
-         * Retrieves a mutated CIDR notation with the base of {@code base}.
-         *
-         * @param base the base.
-         * @return the notation.
-         */
-        @Nonnull
-        public abstract CIDRNotation base (@Nonnull A base);
+  /**
+   * Retrieves the base address.
+   *
+   * @return the address.
+   */
+  @Nonnull
+  @Override
+  public A base() {
+    return this.base;
+  }
 
-        /**
-         * {@inheritDoc}
-         */
-        @Nonnull
-        protected byte[] encoded (@Nonnegative int size) {
-                byte[] encoded = new byte[size];
+  /**
+   * Retrieves a mutated CIDR notation with the base of {@code base}.
+   *
+   * @param base the base.
+   * @return the notation.
+   */
+  @Nonnull
+  public abstract CIDRNotation base(@Nonnull A base);
 
-                for (int i = 0; i < this.prefixLength (); i++) {
-                        int index = (i / 8);
-                        int offset = (i % 8);
+  /**
+   * {@inheritDoc}
+   */
+  @Nonnull
+  protected byte[] encoded(@Nonnegative int size) {
+    byte[] encoded = new byte[size];
 
-                        encoded[index] |= (0x80 >> offset);
-                }
+    for (int i = 0; i < this.prefixLength(); i++) {
+      int index = (i / 8);
+      int offset = (i % 8);
 
-                return encoded;
-        }
+      encoded[index] |= (0x80 >> offset);
+    }
 
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public boolean matches (@Nonnull InetAddress address) {
-                if (!this.base.getClass ().isAssignableFrom (address.getClass ())) {
-                        return false;
-                }
-                byte[] mask = this.encoded ();
-                byte[] base = this.base ().getAddress ();
-                byte[] encoded = address.getAddress ();
+    return encoded;
+  }
 
-                for (int i = 0; i < mask.length; i++) {
-                        if ((encoded[i] & mask[i]) != base[i]) {
-                                return false;
-                        }
-                }
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean equals(Object object) {
+    if (this == object) {
+      return true;
+    }
+    if (object == null || getClass() != object.getClass()) {
+      return false;
+    }
 
-                return true;
-        }
+    AbstractCIDRNotation<?> that = (AbstractCIDRNotation<?>) object;
 
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public boolean matches (@Nonnull String address) throws IllegalArgumentException, UnknownHostException {
-                return this.matches (InetAddress.getByName (address));
-        }
+    if (prefixLength != that.prefixLength) {
+      return false;
+    }
+    return base.equals(that.base);
+  }
 
-        /**
-         * {@inheritDoc}
-         */
-        @Nonnull
-        @Override
-        public <T extends InetAddress> CIDRNotation matches (@Nonnull T address, @Nonnull Consumer<T> consumer) {
-                if (this.matches (address)) {
-                        consumer.accept (address);
-                }
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public int hashCode() {
+    int result = base.hashCode();
+    result = 31 * result + prefixLength;
+    return result;
+  }
 
-                return this;
-        }
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean matches(@Nonnull InetAddress address) {
+    if (!this.base.getClass().isAssignableFrom(address.getClass())) {
+      return false;
+    }
+    byte[] mask = this.encoded();
+    byte[] base = this.base().getAddress();
+    byte[] encoded = address.getAddress();
 
-        /**
-         * {@inheritDoc}
-         */
-        @Nonnull
-        @Override
-        public CIDRNotation matches (@Nonnull String address, @Nonnull Consumer<String> consumer) throws IllegalArgumentException, UnknownHostException {
-                if (this.matches (address)) {
-                        consumer.accept (address);
-                }
+    for (int i = 0; i < mask.length; i++) {
+      if ((encoded[i] & mask[i]) != base[i]) {
+        return false;
+      }
+    }
 
-                return this;
-        }
+    return true;
+  }
 
-        /**
-         * {@inheritDoc}
-         */
-        @Nonnull
-        @Override
-        public Set<InetAddress> matching (@Nonnull Set<InetAddress> addresses) {
-                // @formatter:off
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean matches(@Nonnull String address)
+      throws IllegalArgumentException, UnknownHostException {
+    return this.matches(InetAddress.getByName(address));
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Nonnull
+  @Override
+  public <T extends InetAddress> CIDRNotation matches(@Nonnull T address,
+      @Nonnull Consumer<T> consumer) {
+    if (this.matches(address)) {
+      consumer.accept(address);
+    }
+
+    return this;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Nonnull
+  @Override
+  public CIDRNotation matches(@Nonnull String address, @Nonnull Consumer<String> consumer)
+      throws IllegalArgumentException, UnknownHostException {
+    if (this.matches(address)) {
+      consumer.accept(address);
+    }
+
+    return this;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Nonnull
+  @Override
+  public Set<InetAddress> matching(@Nonnull Set<InetAddress> addresses) {
+    // @formatter:off
                 return addresses.stream ()
                                 .filter (this::matches)
                                         .collect (Collectors.toSet ());
                 // @formatter:on
-        }
+  }
 
-        /**
-         * {@inheritDoc}
-         */
-        @Nonnull
-        @Override
-        public CIDRNotation matching (@Nonnull Set<InetAddress> addresses, @Nonnull Consumer<InetAddress> consumer) {
-                // @formatter:off
+  /**
+   * {@inheritDoc}
+   */
+  @Nonnull
+  @Override
+  public CIDRNotation matching(@Nonnull Set<InetAddress> addresses,
+      @Nonnull Consumer<InetAddress> consumer) {
+    // @formatter:off
                 addresses.stream ()
                         .filter (this::matches)
                                 .forEach (consumer);
                 // @formatter:on
 
-                return this;
-        }
+    return this;
+  }
 
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public int prefixLength () {
-                return this.prefixLength;
-        }
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public int prefixLength() {
+    return this.prefixLength;
+  }
 
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public boolean equals (Object object) {
-                if (this == object) {
-                        return true;
-                }
-                if (object == null || getClass () != object.getClass ()) {
-                        return false;
-                }
-
-                AbstractCIDRNotation<?> that = (AbstractCIDRNotation<?>) object;
-
-                if (prefixLength != that.prefixLength) {
-                        return false;
-                }
-                return base.equals (that.base);
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public int hashCode () {
-                int result = base.hashCode ();
-                result = 31 * result + prefixLength;
-                return result;
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Nonnull
-        @Override
-        public String toString () {
-                return this.base ().getHostAddress () + "/" + this.prefixLength ();
-        }
+  /**
+   * {@inheritDoc}
+   */
+  @Nonnull
+  @Override
+  public String toString() {
+    return this.base().getHostAddress() + "/" + this.prefixLength();
+  }
 }
