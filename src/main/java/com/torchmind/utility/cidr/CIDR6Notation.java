@@ -21,8 +21,7 @@ import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 
 /**
- * Provides an {@link java.net.Inet6Address} based {@link com.torchmind.utility.cidr.CIDRNotation}
- * implementation.
+ * Provides a CIDR notation implementation for IPv6 address ranges.
  *
  * @author Johannes Donath
  */

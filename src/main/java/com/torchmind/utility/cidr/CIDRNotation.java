@@ -29,7 +29,6 @@ import javax.annotation.concurrent.ThreadSafe;
 /**
  * Represents a CIDRNotation range.
  *
- * @param <A> the address type.
  * @author Johannes Donath
  */
 @ThreadSafe
@@ -40,8 +39,8 @@ public interface CIDRNotation {
    *
    * @param address The address.
    * @return the notation.
-   * @throws java.lang.IllegalArgumentException when the mask is invalid.
-   * @throws java.net.UnknownHostException when the system cannot find the address.
+   * @throws IllegalArgumentException when the mask is invalid.
+   * @throws UnknownHostException when the system cannot find the address.
    */
   @Nonnull
   static CIDRNotation of(@Nonnull String address)
@@ -63,9 +62,8 @@ public interface CIDRNotation {
    * @param address the address.
    * @param prefixLength the prefix length.
    * @return the notation.
-   * @throws java.lang.IllegalArgumentException when the address type, address or resulting mask is
-   * invalid.
-   * @throws java.net.UnknownHostException when the passed address cannot be resolved.
+   * @throws IllegalArgumentException when the address type, address or resulting mask is invalid.
+   * @throws UnknownHostException when the passed address cannot be resolved.
    */
   @Nonnull
   static CIDRNotation of(@Nonnull String address, @Nonnegative int prefixLength)
@@ -79,7 +77,7 @@ public interface CIDRNotation {
    * @param address the address.
    * @param prefixLength the prefix length.
    * @return the notation.
-   * @throws java.lang.IllegalArgumentException when the address type or resulting mask is invalid.
+   * @throws IllegalArgumentException when the address type or resulting mask is invalid.
    */
   @Nonnull
   static CIDRNotation of(@Nonnull InetAddress address, @Nonnegative int prefixLength)
@@ -101,7 +99,7 @@ public interface CIDRNotation {
    * @param address the address.
    * @param prefixLength the prefix length.
    * @return the notation.
-   * @throws java.lang.IllegalArgumentException when the resulting mask is invalid.
+   * @throws IllegalArgumentException when the resulting mask is invalid.
    */
   @Nonnull
   static CIDR4Notation of(@Nonnull Inet4Address address, @Nonnegative int prefixLength) {
@@ -118,7 +116,7 @@ public interface CIDRNotation {
    * @param address the address.
    * @param prefixLength the prefix length.
    * @return the notation.
-   * @throws java.lang.IllegalArgumentException when the resulting mask is invalid.
+   * @throws IllegalArgumentException when the resulting mask is invalid.
    */
   @Nonnull
   static CIDR6Notation of(@Nonnull Inet6Address address, @Nonnegative int prefixLength) {
@@ -166,8 +164,8 @@ public interface CIDRNotation {
    *
    * @param address the address.
    * @return {@code true} if the address matches, {@code false} otherwise.
-   * @throws java.lang.IllegalArgumentException when an invalid address was supplied.
-   * @throws java.net.UnknownHostException when an unknown host was supplied.
+   * @throws IllegalArgumentException when an invalid address was supplied.
+   * @throws UnknownHostException when an unknown host was supplied.
    */
   boolean matches(@Nonnull String address) throws IllegalArgumentException, UnknownHostException;
 
@@ -188,8 +186,8 @@ public interface CIDRNotation {
    * @param address the address.
    * @param consumer the consumer.
    * @return the CIDRNotation.
-   * @throws java.lang.IllegalArgumentException when an invalid address was supplied.
-   * @throws java.net.UnknownHostException when an unknown host was supplied.
+   * @throws IllegalArgumentException when an invalid address was supplied.
+   * @throws UnknownHostException when an unknown host was supplied.
    */
   @Nonnull
   CIDRNotation matches(@Nonnull String address, @Nonnull Consumer<String> consumer)

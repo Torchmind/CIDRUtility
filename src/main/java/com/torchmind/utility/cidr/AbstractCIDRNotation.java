@@ -26,7 +26,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.concurrent.ThreadSafe;
 
 /**
- * Provides an abstract implementation of {@link com.torchmind.utility.cidr.CIDRNotation}.
+ * Provides an abstract CIDR notation implementation which provides the most basic elements required
+ * for CIDRs of various lengths.
  *
  * @author Johannes Donath
  */
@@ -181,11 +182,9 @@ abstract class AbstractCIDRNotation<A extends InetAddress> implements CIDRNotati
   @Nonnull
   @Override
   public Set<InetAddress> matching(@Nonnull Set<InetAddress> addresses) {
-    // @formatter:off
-                return addresses.stream ()
-                                .filter (this::matches)
-                                        .collect (Collectors.toSet ());
-                // @formatter:on
+    return addresses.stream()
+        .filter(this::matches)
+        .collect(Collectors.toSet());
   }
 
   /**
@@ -195,11 +194,9 @@ abstract class AbstractCIDRNotation<A extends InetAddress> implements CIDRNotati
   @Override
   public CIDRNotation matching(@Nonnull Set<InetAddress> addresses,
       @Nonnull Consumer<InetAddress> consumer) {
-    // @formatter:off
-                addresses.stream ()
-                        .filter (this::matches)
-                                .forEach (consumer);
-                // @formatter:on
+    addresses.stream()
+        .filter(this::matches)
+        .forEach(consumer);
 
     return this;
   }

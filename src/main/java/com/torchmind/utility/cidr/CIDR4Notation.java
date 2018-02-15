@@ -21,7 +21,7 @@ import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 
 /**
- * Provides an {@link java.net.Inet4Address} based CIDR notation.
+ * Provides a CIDR notation implementation for IPv4 address ranges.
  *
  * @author Johannes Donath
  */
