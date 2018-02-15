@@ -14,10 +14,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.torchmind.utility.cidr.test;
+package com.torchmind.utility.cidr;
 
-import com.torchmind.utility.cidr.CIDR4Notation;
-import com.torchmind.utility.cidr.CIDRNotation;
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -38,8 +36,8 @@ import org.mockito.runners.MockitoJUnitRunner;
 public class CIDRNotationTest {
 
   /**
-   * Tests whether {@link com.torchmind.utility.cidr.AbstractCIDRNotation#AbstractCIDRNotation(InetAddress,
-   * int)} verifies passed masks correctly.
+   * Tests whether {@link AbstractCIDRNotation#AbstractCIDRNotation(InetAddress, int)} verifies
+   * passed masks correctly.
    */
   @Test
   public void testBaseVerification() {
