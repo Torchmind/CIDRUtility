@@ -24,17 +24,17 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 /**
- * Provides an abstract CIDR notation implementation which provides the most basic elements required
- * for CIDRs of various lengths.
+ * Provides an abstract implementation for address ranges within networks of arbitrary address sizes
+ * using a prefix notation (also known as CIDR).
  *
  * @author Johannes Donath
  */
-abstract class AbstractCIDRNotation<A extends InetAddress> implements CIDRNotation {
+abstract class AbstractAddressRange<A extends InetAddress> implements AddressRange {
 
   private final A base;
   private final int prefixLength;
 
-  protected AbstractCIDRNotation(@NonNull A base, int prefixLength) {
+  protected AbstractAddressRange(@NonNull A base, int prefixLength) {
     this.base = base;
     this.prefixLength = prefixLength;
 
@@ -66,7 +66,7 @@ abstract class AbstractCIDRNotation<A extends InetAddress> implements CIDRNotati
    * @return the notation.
    */
   @NonNull
-  public abstract CIDRNotation base(@NonNull A base);
+  public abstract AddressRange base(@NonNull A base);
 
   /**
    * {@inheritDoc}
@@ -97,7 +97,7 @@ abstract class AbstractCIDRNotation<A extends InetAddress> implements CIDRNotati
       return false;
     }
 
-    AbstractCIDRNotation<?> that = (AbstractCIDRNotation<?>) object;
+    AbstractAddressRange<?> that = (AbstractAddressRange<?>) object;
 
     if (prefixLength != that.prefixLength) {
       return false;
@@ -150,52 +150,10 @@ abstract class AbstractCIDRNotation<A extends InetAddress> implements CIDRNotati
    */
   @NonNull
   @Override
-  public <T extends InetAddress> CIDRNotation matches(@NonNull T address,
-      @NonNull Consumer<T> consumer) {
-    if (this.matches(address)) {
-      consumer.accept(address);
-    }
-
-    return this;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @NonNull
-  @Override
-  public CIDRNotation matches(@NonNull String address, @NonNull Consumer<String> consumer)
-      throws IllegalArgumentException, UnknownHostException {
-    if (this.matches(address)) {
-      consumer.accept(address);
-    }
-
-    return this;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @NonNull
-  @Override
   public Set<InetAddress> matching(@NonNull Set<InetAddress> addresses) {
     return addresses.stream()
         .filter(this::matches)
         .collect(Collectors.toSet());
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @NonNull
-  @Override
-  public CIDRNotation matching(@NonNull Set<InetAddress> addresses,
-      @NonNull Consumer<InetAddress> consumer) {
-    addresses.stream()
-        .filter(this::matches)
-        .forEach(consumer);
-
-    return this;
   }
 
   /**

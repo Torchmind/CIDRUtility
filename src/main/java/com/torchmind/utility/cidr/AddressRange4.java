@@ -17,16 +17,16 @@
 package com.torchmind.utility.cidr;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
-import java.net.Inet6Address;
+import java.net.Inet4Address;
 
 /**
- * Provides a CIDR notation implementation for IPv6 address ranges.
+ * Represents a 32-bit address range (as implemented by IPv4).
  *
  * @author Johannes Donath
  */
-public final class CIDR6Notation extends AbstractCIDRNotation<Inet6Address> {
+public final class AddressRange4 extends AbstractAddressRange<Inet4Address> {
 
-  protected CIDR6Notation(@NonNull Inet6Address base, int prefixLength) {
+  protected AddressRange4(@NonNull Inet4Address base, int prefixLength) {
     super(base, prefixLength);
   }
 
@@ -35,8 +35,8 @@ public final class CIDR6Notation extends AbstractCIDRNotation<Inet6Address> {
    */
   @NonNull
   @Override
-  public CIDRNotation base(@NonNull Inet6Address base) {
-    return (new CIDR6Notation(base, this.prefixLength()));
+  public AddressRange base(@NonNull Inet4Address base) {
+    return (new AddressRange4(base, this.prefixLength()));
   }
 
   /**
@@ -44,7 +44,7 @@ public final class CIDR6Notation extends AbstractCIDRNotation<Inet6Address> {
    */
   @Override
   public long blockSize() {
-    return ((long) Math.pow(2, (64 - this.prefixLength())));
+    return ((long) Math.pow(2, (32 - this.prefixLength())));
   }
 
   /**
@@ -53,7 +53,7 @@ public final class CIDR6Notation extends AbstractCIDRNotation<Inet6Address> {
   @NonNull
   @Override
   public byte[] encoded() {
-    return this.encoded(8);
+    return this.encoded(4);
   }
 
   /**
@@ -61,7 +61,7 @@ public final class CIDR6Notation extends AbstractCIDRNotation<Inet6Address> {
    */
   @NonNull
   @Override
-  public CIDRNotation prefixLength(int prefixLength) {
-    return (new CIDR6Notation(this.base(), prefixLength));
+  public AddressRange prefixLength(int prefixLength) {
+    return (new AddressRange4(this.base(), prefixLength));
   }
 }

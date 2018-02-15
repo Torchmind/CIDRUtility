@@ -28,15 +28,15 @@ import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 
 /**
- * Provides test cases for {@link CIDRNotation} and all of it's implementations.
+ * Provides test cases for {@link AddressRange} and all of it's implementations.
  *
  * @author Johannes Donath
  */
 @RunWith(MockitoJUnitRunner.class)
-public class CIDRNotationTest {
+public class AddressRangeTest {
 
   /**
-   * Tests whether {@link AbstractCIDRNotation#AbstractCIDRNotation(InetAddress, int)} verifies
+   * Tests whether {@link AbstractAddressRange#AbstractAddressRange(InetAddress, int)} verifies
    * passed masks correctly.
    */
   @Test
@@ -46,7 +46,7 @@ public class CIDRNotationTest {
 
         if (!b) {
           try {
-            CIDRNotation.of(m);
+            AddressRange.of(m);
             throw new AssertionError(
                 "Expected IllegalArgumentException due to invalid mask specification: " + m);
           } catch (IllegalArgumentException ignore) {
@@ -55,7 +55,7 @@ public class CIDRNotationTest {
           return;
         }
 
-        CIDRNotation.of(m);
+        AddressRange.of(m);
       } catch (UnknownHostException ex) {
         throw new AssertionError("Unexpected exception: " + ex.getMessage(), ex);
       }
@@ -88,67 +88,67 @@ public class CIDRNotationTest {
   }
 
   /**
-   * Tests {@link CIDRNotation#blockSize()}.
+   * Tests {@link AddressRange#blockSize()}.
    */
   @Test
   public void testBlockSize() throws UnknownHostException {
-    Assert.assertEquals(4294967296L, CIDRNotation.of("0.0.0.0/0").blockSize());
+    Assert.assertEquals(4294967296L, AddressRange.of("0.0.0.0/0").blockSize());
 
-    Assert.assertEquals(2147483648L, CIDRNotation.of("128.0.0.0/1").blockSize());
-    Assert.assertEquals(1073741824L, CIDRNotation.of("192.0.0.0/2").blockSize());
-    Assert.assertEquals(536870912L, CIDRNotation.of("224.0.0.0/3").blockSize());
-    Assert.assertEquals(268435456L, CIDRNotation.of("240.0.0.0/4").blockSize());
-    Assert.assertEquals(134217728L, CIDRNotation.of("248.0.0.0/5").blockSize());
-    Assert.assertEquals(67108864L, CIDRNotation.of("252.0.0.0/6").blockSize());
-    Assert.assertEquals(33554432L, CIDRNotation.of("254.0.0.0/7").blockSize());
-    Assert.assertEquals(16777216L, CIDRNotation.of("255.0.0.0/8").blockSize());
+    Assert.assertEquals(2147483648L, AddressRange.of("128.0.0.0/1").blockSize());
+    Assert.assertEquals(1073741824L, AddressRange.of("192.0.0.0/2").blockSize());
+    Assert.assertEquals(536870912L, AddressRange.of("224.0.0.0/3").blockSize());
+    Assert.assertEquals(268435456L, AddressRange.of("240.0.0.0/4").blockSize());
+    Assert.assertEquals(134217728L, AddressRange.of("248.0.0.0/5").blockSize());
+    Assert.assertEquals(67108864L, AddressRange.of("252.0.0.0/6").blockSize());
+    Assert.assertEquals(33554432L, AddressRange.of("254.0.0.0/7").blockSize());
+    Assert.assertEquals(16777216L, AddressRange.of("255.0.0.0/8").blockSize());
 
-    Assert.assertEquals(8388608L, CIDRNotation.of("255.128.0.0/9").blockSize());
-    Assert.assertEquals(4194304L, CIDRNotation.of("255.192.0.0/10").blockSize());
-    Assert.assertEquals(2097152L, CIDRNotation.of("255.224.0.0/11").blockSize());
-    Assert.assertEquals(1048576L, CIDRNotation.of("255.240.0.0/12").blockSize());
-    Assert.assertEquals(524288L, CIDRNotation.of("255.248.0.0/13").blockSize());
-    Assert.assertEquals(262144L, CIDRNotation.of("255.252.0.0/14").blockSize());
-    Assert.assertEquals(131072L, CIDRNotation.of("255.254.0.0/15").blockSize());
-    Assert.assertEquals(65536L, CIDRNotation.of("255.255.0.0/16").blockSize());
+    Assert.assertEquals(8388608L, AddressRange.of("255.128.0.0/9").blockSize());
+    Assert.assertEquals(4194304L, AddressRange.of("255.192.0.0/10").blockSize());
+    Assert.assertEquals(2097152L, AddressRange.of("255.224.0.0/11").blockSize());
+    Assert.assertEquals(1048576L, AddressRange.of("255.240.0.0/12").blockSize());
+    Assert.assertEquals(524288L, AddressRange.of("255.248.0.0/13").blockSize());
+    Assert.assertEquals(262144L, AddressRange.of("255.252.0.0/14").blockSize());
+    Assert.assertEquals(131072L, AddressRange.of("255.254.0.0/15").blockSize());
+    Assert.assertEquals(65536L, AddressRange.of("255.255.0.0/16").blockSize());
 
-    Assert.assertEquals(32768L, CIDRNotation.of("255.255.128.0/17").blockSize());
-    Assert.assertEquals(16384L, CIDRNotation.of("255.255.192.0/18").blockSize());
-    Assert.assertEquals(8192L, CIDRNotation.of("255.255.224.0/19").blockSize());
-    Assert.assertEquals(4096L, CIDRNotation.of("255.255.240.0/20").blockSize());
-    Assert.assertEquals(2048L, CIDRNotation.of("255.255.248.0/21").blockSize());
-    Assert.assertEquals(1024L, CIDRNotation.of("255.255.252.0/22").blockSize());
-    Assert.assertEquals(512L, CIDRNotation.of("255.255.254.0/23").blockSize());
-    Assert.assertEquals(256L, CIDRNotation.of("255.255.255.0/24").blockSize());
+    Assert.assertEquals(32768L, AddressRange.of("255.255.128.0/17").blockSize());
+    Assert.assertEquals(16384L, AddressRange.of("255.255.192.0/18").blockSize());
+    Assert.assertEquals(8192L, AddressRange.of("255.255.224.0/19").blockSize());
+    Assert.assertEquals(4096L, AddressRange.of("255.255.240.0/20").blockSize());
+    Assert.assertEquals(2048L, AddressRange.of("255.255.248.0/21").blockSize());
+    Assert.assertEquals(1024L, AddressRange.of("255.255.252.0/22").blockSize());
+    Assert.assertEquals(512L, AddressRange.of("255.255.254.0/23").blockSize());
+    Assert.assertEquals(256L, AddressRange.of("255.255.255.0/24").blockSize());
 
-    Assert.assertEquals(128L, CIDRNotation.of("255.255.255.128/25").blockSize());
-    Assert.assertEquals(64L, CIDRNotation.of("255.255.255.192/26").blockSize());
-    Assert.assertEquals(32L, CIDRNotation.of("255.255.255.224/27").blockSize());
-    Assert.assertEquals(16L, CIDRNotation.of("255.255.255.240/28").blockSize());
-    Assert.assertEquals(8L, CIDRNotation.of("255.255.255.248/29").blockSize());
-    Assert.assertEquals(4L, CIDRNotation.of("255.255.255.252/30").blockSize());
-    Assert.assertEquals(2L, CIDRNotation.of("255.255.255.254/31").blockSize());
-    Assert.assertEquals(1L, CIDRNotation.of("255.255.255.255/32").blockSize());
+    Assert.assertEquals(128L, AddressRange.of("255.255.255.128/25").blockSize());
+    Assert.assertEquals(64L, AddressRange.of("255.255.255.192/26").blockSize());
+    Assert.assertEquals(32L, AddressRange.of("255.255.255.224/27").blockSize());
+    Assert.assertEquals(16L, AddressRange.of("255.255.255.240/28").blockSize());
+    Assert.assertEquals(8L, AddressRange.of("255.255.255.248/29").blockSize());
+    Assert.assertEquals(4L, AddressRange.of("255.255.255.252/30").blockSize());
+    Assert.assertEquals(2L, AddressRange.of("255.255.255.254/31").blockSize());
+    Assert.assertEquals(1L, AddressRange.of("255.255.255.255/32").blockSize());
   }
 
   /**
-   * Tests {@link CIDRNotation#equals(Object)}.
+   * Tests {@link AddressRange#equals(Object)}.
    */
   @Test
   public void testEquals() throws UnknownHostException {
-    CIDRNotation range00 = CIDRNotation.of("10.0.0.0/8");
-    CIDRNotation range01 = CIDRNotation.of("10.0.0.0/8");
-    CIDRNotation range02 = CIDRNotation.of("10.10.0.0/16");
-    CIDRNotation range03 = CIDRNotation.of("10.10.0.0/16");
-    CIDRNotation range04 = CIDRNotation.of("10.10.10.0/24");
-    CIDRNotation range05 = CIDRNotation.of("10.10.10.0/24");
-    CIDRNotation range06 = CIDRNotation.of("10.10.10.10/32");
-    CIDRNotation range07 = CIDRNotation.of("10.10.10.10/32");
-    CIDRNotation range08 = CIDRNotation.of("127.0.0.0/31");
-    CIDRNotation range09 = CIDRNotation.of("127.0.0.0/31");
+    AddressRange range00 = AddressRange.of("10.0.0.0/8");
+    AddressRange range01 = AddressRange.of("10.0.0.0/8");
+    AddressRange range02 = AddressRange.of("10.10.0.0/16");
+    AddressRange range03 = AddressRange.of("10.10.0.0/16");
+    AddressRange range04 = AddressRange.of("10.10.10.0/24");
+    AddressRange range05 = AddressRange.of("10.10.10.0/24");
+    AddressRange range06 = AddressRange.of("10.10.10.10/32");
+    AddressRange range07 = AddressRange.of("10.10.10.10/32");
+    AddressRange range08 = AddressRange.of("127.0.0.0/31");
+    AddressRange range09 = AddressRange.of("127.0.0.0/31");
 
     {
-      CIDRNotation current = range00;
+      AddressRange current = range00;
 
       Assert.assertEquals(current, range00);
       Assert.assertEquals(current, range01);
@@ -163,7 +163,7 @@ public class CIDRNotationTest {
     }
 
     {
-      CIDRNotation current = range01;
+      AddressRange current = range01;
 
       Assert.assertEquals(current, range00);
       Assert.assertEquals(current, range01);
@@ -178,7 +178,7 @@ public class CIDRNotationTest {
     }
 
     {
-      CIDRNotation current = range02;
+      AddressRange current = range02;
 
       Assert.assertNotEquals(current, range00);
       Assert.assertNotEquals(current, range01);
@@ -193,7 +193,7 @@ public class CIDRNotationTest {
     }
 
     {
-      CIDRNotation current = range03;
+      AddressRange current = range03;
 
       Assert.assertNotEquals(current, range00);
       Assert.assertNotEquals(current, range01);
@@ -208,7 +208,7 @@ public class CIDRNotationTest {
     }
 
     {
-      CIDRNotation current = range04;
+      AddressRange current = range04;
 
       Assert.assertNotEquals(current, range00);
       Assert.assertNotEquals(current, range01);
@@ -223,7 +223,7 @@ public class CIDRNotationTest {
     }
 
     {
-      CIDRNotation current = range05;
+      AddressRange current = range05;
 
       Assert.assertNotEquals(current, range00);
       Assert.assertNotEquals(current, range01);
@@ -238,7 +238,7 @@ public class CIDRNotationTest {
     }
 
     {
-      CIDRNotation current = range06;
+      AddressRange current = range06;
 
       Assert.assertNotEquals(current, range00);
       Assert.assertNotEquals(current, range01);
@@ -253,7 +253,7 @@ public class CIDRNotationTest {
     }
 
     {
-      CIDRNotation current = range07;
+      AddressRange current = range07;
 
       Assert.assertNotEquals(current, range00);
       Assert.assertNotEquals(current, range01);
@@ -268,7 +268,7 @@ public class CIDRNotationTest {
     }
 
     {
-      CIDRNotation current = range08;
+      AddressRange current = range08;
 
       Assert.assertNotEquals(current, range00);
       Assert.assertNotEquals(current, range01);
@@ -283,7 +283,7 @@ public class CIDRNotationTest {
     }
 
     {
-      CIDRNotation current = range09;
+      AddressRange current = range09;
 
       Assert.assertNotEquals(current, range00);
       Assert.assertNotEquals(current, range01);
@@ -299,15 +299,15 @@ public class CIDRNotationTest {
   }
 
   /**
-   * Tests {@link CIDRNotation#matches(InetAddress)}.
+   * Tests {@link AddressRange#matches(InetAddress)}.
    */
   @Test
   public void testMatch() throws UnknownHostException {
-    CIDRNotation range01 = CIDRNotation.of("10.0.0.0/8");
-    CIDRNotation range02 = CIDRNotation.of("10.10.0.0/16");
-    CIDRNotation range03 = CIDRNotation.of("10.10.10.0/24");
-    CIDRNotation range04 = CIDRNotation.of("10.10.10.10/32");
-    CIDRNotation range05 = CIDRNotation.of("127.0.0.0/31");
+    AddressRange range01 = AddressRange.of("10.0.0.0/8");
+    AddressRange range02 = AddressRange.of("10.10.0.0/16");
+    AddressRange range03 = AddressRange.of("10.10.10.0/24");
+    AddressRange range04 = AddressRange.of("10.10.10.10/32");
+    AddressRange range05 = AddressRange.of("127.0.0.0/31");
 
     Inet4Address address01 = ((Inet4Address) InetAddress.getByName("10.0.0.0"));
     Inet4Address address02 = ((Inet4Address) InetAddress.getByName("10.0.0.1"));
@@ -330,7 +330,7 @@ public class CIDRNotationTest {
     Inet4Address address16 = ((Inet4Address) InetAddress.getByName("127.0.0.2"));
 
     {
-      CIDRNotation currentRange = range01;
+      AddressRange currentRange = range01;
 
       Assert.assertTrue(currentRange.matches(address01));
       Assert.assertTrue(currentRange.matches(address02));
@@ -354,7 +354,7 @@ public class CIDRNotationTest {
     }
 
     {
-      CIDRNotation currentRange = range02;
+      AddressRange currentRange = range02;
 
       Assert.assertFalse(currentRange.matches(address01));
       Assert.assertFalse(currentRange.matches(address02));
@@ -378,7 +378,7 @@ public class CIDRNotationTest {
     }
 
     {
-      CIDRNotation currentRange = range03;
+      AddressRange currentRange = range03;
 
       Assert.assertFalse(currentRange.matches(address01));
       Assert.assertFalse(currentRange.matches(address02));
@@ -402,7 +402,7 @@ public class CIDRNotationTest {
     }
 
     {
-      CIDRNotation currentRange = range04;
+      AddressRange currentRange = range04;
 
       Assert.assertFalse(currentRange.matches(address01));
       Assert.assertFalse(currentRange.matches(address02));
@@ -426,7 +426,7 @@ public class CIDRNotationTest {
     }
 
     {
-      CIDRNotation currentRange = range05;
+      AddressRange currentRange = range05;
 
       Assert.assertFalse(currentRange.matches(address01));
       Assert.assertFalse(currentRange.matches(address02));
@@ -451,14 +451,14 @@ public class CIDRNotationTest {
   }
 
   /**
-   * Tests {@link CIDRNotation#of(String)}.
+   * Tests {@link AddressRange#of(String)}.
    */
   @Test
   public void testParse() throws UnknownHostException {
-    CIDR4Notation address00 = ((CIDR4Notation) CIDRNotation.of("10.0.0.0/8"));
-    CIDR4Notation address01 = ((CIDR4Notation) CIDRNotation.of("10.10.0.0/16"));
-    CIDR4Notation address02 = ((CIDR4Notation) CIDRNotation.of("10.10.10.0/24"));
-    CIDR4Notation address03 = ((CIDR4Notation) CIDRNotation.of("10.10.10.10/32"));
+    AddressRange4 address00 = ((AddressRange4) AddressRange.of("10.0.0.0/8"));
+    AddressRange4 address01 = ((AddressRange4) AddressRange.of("10.10.0.0/16"));
+    AddressRange4 address02 = ((AddressRange4) AddressRange.of("10.10.10.0/24"));
+    AddressRange4 address03 = ((AddressRange4) AddressRange.of("10.10.10.10/32"));
 
     {
       Assert.assertEquals(InetAddress.getByName("10.0.0.0"), address00.base());
@@ -482,14 +482,14 @@ public class CIDRNotationTest {
   }
 
   /**
-   * Tests {@link CIDRNotation#toString()}.
+   * Tests {@link AddressRange#toString()}.
    */
   @Test
   public void testToString() throws UnknownHostException {
-    Assert.assertEquals("10.0.0.0/8", CIDRNotation.of("10.0.0.0/8").toString());
-    Assert.assertEquals("10.10.0.0/16", CIDRNotation.of("10.10.0.0/16").toString());
-    Assert.assertEquals("10.10.10.0/24", CIDRNotation.of("10.10.10.0/24").toString());
-    Assert.assertEquals("10.10.10.10/32", CIDRNotation.of("10.10.10.10/32").toString());
-    Assert.assertEquals("127.0.0.0/31", CIDRNotation.of("127.0.0.0/31").toString());
+    Assert.assertEquals("10.0.0.0/8", AddressRange.of("10.0.0.0/8").toString());
+    Assert.assertEquals("10.10.0.0/16", AddressRange.of("10.10.0.0/16").toString());
+    Assert.assertEquals("10.10.10.0/24", AddressRange.of("10.10.10.0/24").toString());
+    Assert.assertEquals("10.10.10.10/32", AddressRange.of("10.10.10.10/32").toString());
+    Assert.assertEquals("127.0.0.0/31", AddressRange.of("127.0.0.0/31").toString());
   }
 }

@@ -22,17 +22,16 @@ import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Set;
-import java.util.function.Consumer;
 
 /**
- * Represents a CIDRNotation range.
+ * Represents an arbitrary range of one or more addresses of a specific address type.
  *
  * @author Johannes Donath
  */
-public interface CIDRNotation {
+public interface AddressRange {
 
   /**
-   * Retrieves a CIDR notation based on an encoded address.
+   * Parses an address range from its human readable CIDR based notation (such as 192.168.0.0/16).
    *
    * @param address The address.
    * @return the notation.
@@ -40,7 +39,7 @@ public interface CIDRNotation {
    * @throws UnknownHostException when the system cannot find the address.
    */
   @NonNull
-  static CIDRNotation of(@NonNull String address)
+  static AddressRange of(@NonNull String address)
       throws IllegalArgumentException, UnknownHostException {
     int lengthOffset = address.indexOf('/');
 
@@ -54,7 +53,7 @@ public interface CIDRNotation {
   }
 
   /**
-   * Retrieves a CIDR notation based on a human readable address and prefix length.
+   * Creates an address range based on a pre-defined address and prefix length.
    *
    * @param address the address.
    * @param prefixLength the prefix length.
@@ -63,13 +62,13 @@ public interface CIDRNotation {
    * @throws UnknownHostException when the passed address cannot be resolved.
    */
   @NonNull
-  static CIDRNotation of(@NonNull String address, int prefixLength)
+  static AddressRange of(@NonNull String address, int prefixLength)
       throws IllegalArgumentException, UnknownHostException {
     return of(InetAddress.getByName(address), prefixLength);
   }
 
   /**
-   * Retrieves a CIDR notation based on an address and a prefix length.
+   * Creates an address range based on a pre-defined address and prefix length.
    *
    * @param address the address.
    * @param prefixLength the prefix length.
@@ -77,7 +76,7 @@ public interface CIDRNotation {
    * @throws IllegalArgumentException when the address type or resulting mask is invalid.
    */
   @NonNull
-  static CIDRNotation of(@NonNull InetAddress address, int prefixLength)
+  static AddressRange of(@NonNull InetAddress address, int prefixLength)
       throws IllegalArgumentException {
     if (address instanceof Inet4Address) {
       return of(((Inet4Address) address), prefixLength);
@@ -91,7 +90,7 @@ public interface CIDRNotation {
   }
 
   /**
-   * Retrieves a CIDR notation based on an IPv4 address and prefix length.
+   * Creates an address range based on a pre-defined address and prefix length.
    *
    * @param address the address.
    * @param prefixLength the prefix length.
@@ -99,16 +98,16 @@ public interface CIDRNotation {
    * @throws IllegalArgumentException when the resulting mask is invalid.
    */
   @NonNull
-  static CIDR4Notation of(@NonNull Inet4Address address, int prefixLength) {
+  static AddressRange4 of(@NonNull Inet4Address address, int prefixLength) {
     if (prefixLength == -1) {
       prefixLength = 32;
     }
 
-    return (new CIDR4Notation(address, prefixLength));
+    return (new AddressRange4(address, prefixLength));
   }
 
   /**
-   * Retrieves a CIDR notation based on an IPv6 address and prefix length.
+   * Creates an address range based on a pre-defined address and prefix length.
    *
    * @param address the address.
    * @param prefixLength the prefix length.
@@ -116,18 +115,18 @@ public interface CIDRNotation {
    * @throws IllegalArgumentException when the resulting mask is invalid.
    */
   @NonNull
-  static CIDR6Notation of(@NonNull Inet6Address address, int prefixLength) {
+  static AddressRange6 of(@NonNull Inet6Address address, int prefixLength) {
     if (prefixLength == -1) {
       prefixLength = 64;
     }
 
-    return (new CIDR6Notation(address, prefixLength));
+    return (new AddressRange6(address, prefixLength));
   }
 
   /**
-   * Retrieves the base address.
+   * Retrieves the base address which addresses match against.
    *
-   * @return the address.
+   * @return a base address.
    */
   @NonNull
   InetAddress base();
@@ -135,100 +134,68 @@ public interface CIDRNotation {
   /**
    * Retrieves the amount of addresses within the block.
    *
-   * @return the size.
+   * @return a total amount of addresses.
    */
   long blockSize();
 
   /**
-   * Retrieves a binary encoded CIDRNotation mask.
+   * Retrieves a binary representation of the address netmask (e.g. a bitmask which exposes the
+   * relevant elements of the address).
    *
-   * @return the bytes.
+   * @return a binary mask.
    */
   @NonNull
   byte[] encoded();
 
   /**
-   * Checks whether an address matches.
+   * Evaluates whether the specified address is part of this address range.
    *
    * @param address the address.
-   * @return {@code true} if the address matches, {@code false} otherwise.
+   * @return true if the address matches, false otherwise.
    */
   boolean matches(@NonNull InetAddress address);
 
   /**
-   * Checks whether an address matches.
+   * Evaluates whether the specified address is part of this address range.
    *
    * @param address the address.
-   * @return {@code true} if the address matches, {@code false} otherwise.
+   * @return true if the address matches, false otherwise.
    * @throws IllegalArgumentException when an invalid address was supplied.
    * @throws UnknownHostException when an unknown host was supplied.
    */
   boolean matches(@NonNull String address) throws IllegalArgumentException, UnknownHostException;
 
   /**
-   * Checks whether an address matches and calls {@code consumer} if so.
+   * Creates a new set consisting only of addresses which fall within this address range (omitting
+   * any of the addresses contained within the set which are of an incompatible address type or fall
+   * outside of this range).
    *
-   * @param address the address.
-   * @param consumer the consumer.
-   * @param <T> the address type.
-   * @return the CIDRNotation.
-   */
-  @NonNull
-  <T extends InetAddress> CIDRNotation matches(@NonNull T address, @NonNull Consumer<T> consumer);
-
-  /**
-   * Checks whether an address matches andd calls {@code consumer} if so.
-   *
-   * @param address the address.
-   * @param consumer the consumer.
-   * @return the CIDRNotation.
-   * @throws IllegalArgumentException when an invalid address was supplied.
-   * @throws UnknownHostException when an unknown host was supplied.
-   */
-  @NonNull
-  CIDRNotation matches(@NonNull String address, @NonNull Consumer<String> consumer)
-      throws IllegalArgumentException, UnknownHostException;
-
-  /**
-   * Filters a set and outputs all matching addresses.
-   *
-   * @param addresses the address.
-   * @return the result set.
+   * @param addresses a set of addresses.
+   * @return a set of matching addresses.
    */
   @NonNull
   Set<InetAddress> matching(@NonNull Set<InetAddress> addresses);
 
   /**
-   * Filters a set and passes all matching addresses to {@code consumer}.
+   * Retrieves the total prefix length (in bits).
    *
-   * @param addresses the addresses.
-   * @param consumer the consumer.
-   * @return the CIDRNotation.
-   */
-  @NonNull
-  CIDRNotation matching(@NonNull Set<InetAddress> addresses,
-      @NonNull Consumer<InetAddress> consumer);
-
-  /**
-   * Retrieves the prefix length.
-   *
-   * @return the length.
+   * @return a prefix length.
    */
   int prefixLength();
 
   /**
-   * Retrieves a mutated CIDRNotation with the specified prefix length.
+   * Constructs a mutated address range with the same base address and an altered prefix length.
    *
-   * @param prefixLength the prefix length.
-   * @return the mutated CIDRNotation.
+   * @param prefixLength a new prefix length.
+   * @return a mutated address range.
    */
   @NonNull
-  CIDRNotation prefixLength(int prefixLength);
+  AddressRange prefixLength(int prefixLength);
 
   /**
-   * Retrieves a string representation of the CIDRNotation notation.
+   * Encodes an address range into its human readable CIDR notation.
    *
-   * @return the string.
+   * @return a human readable notation.
    */
   @NonNull
   String toString();
