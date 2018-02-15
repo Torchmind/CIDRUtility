@@ -32,11 +32,11 @@ When running maven you may simply add a new dependency along with our repository
 
 ```xml
 <dependencies>
-        <dependency>
-                <groupId>com.torchmind.utility</groupId>
-                <artifactId>cidr</artifactId>
-                <version>2.1.0</version>
-        </dependency>
+  <dependency>
+    <groupId>com.torchmind.utility</groupId>
+    <artifactId>cidr</artifactId>
+    <version>2.1.0</version>
+  </dependency>
 </dependencies>
 ```
 
