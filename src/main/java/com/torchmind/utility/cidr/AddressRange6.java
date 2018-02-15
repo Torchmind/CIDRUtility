@@ -44,7 +44,7 @@ public final class AddressRange6 extends AbstractAddressRange<Inet6Address> {
    */
   @Override
   public long blockSize() {
-    return ((long) Math.pow(2, (64 - this.prefixLength())));
+    return ((long) Math.pow(2, (128 - this.prefixLength())));
   }
 
   /**
@@ -53,7 +53,7 @@ public final class AddressRange6 extends AbstractAddressRange<Inet6Address> {
   @NonNull
   @Override
   public byte[] encoded() {
-    return this.encoded(8);
+    return this.encoded(16);
   }
 
   /**
