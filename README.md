@@ -28,7 +28,7 @@ Contacts
 Using
 -----
 
-When running maven you may simply add a new dependency along with our repository to your ```pom.xml```:
+When running maven you may simply add a new dependency to your ```pom.xml```:
 
 ```xml
 <dependencies>
