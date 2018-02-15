@@ -26,6 +26,11 @@ import java.net.Inet4Address;
  */
 public final class AddressRange4 extends AbstractAddressRange<Inet4Address> {
 
+  /**
+   * Defines the maximum permitted amount of bits within an address prefix.
+   */
+  public static final int MAX_PREFIX_LENGTH = 32;
+
   protected AddressRange4(@NonNull Inet4Address base, int prefixLength) {
     super(base, prefixLength);
   }
@@ -44,7 +49,7 @@ public final class AddressRange4 extends AbstractAddressRange<Inet4Address> {
    */
   @Override
   public long blockSize() {
-    return ((long) Math.pow(2, (32 - this.prefixLength())));
+    return ((long) Math.pow(2, (MAX_PREFIX_LENGTH - this.prefixLength())));
   }
 
   /**

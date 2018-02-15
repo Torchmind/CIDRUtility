@@ -26,6 +26,11 @@ import java.net.Inet6Address;
  */
 public final class AddressRange6 extends AbstractAddressRange<Inet6Address> {
 
+  /**
+   * Defines the maximum permitted amount of bits within an address prefix.
+   */
+  public static final int MAX_PREFIX_LENGTH = 128;
+
   protected AddressRange6(@NonNull Inet6Address base, int prefixLength) {
     super(base, prefixLength);
   }
@@ -44,7 +49,7 @@ public final class AddressRange6 extends AbstractAddressRange<Inet6Address> {
    */
   @Override
   public long blockSize() {
-    return ((long) Math.pow(2, (128 - this.prefixLength())));
+    return ((long) Math.pow(2, (MAX_PREFIX_LENGTH - this.prefixLength())));
   }
 
   /**
