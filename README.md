@@ -1,6 +1,7 @@
 [![License](https://img.shields.io/github/license/Torchmind/CIDRUtility.svg?style=flat-square)](https://www.apache.org/licenses/LICENSE-2.0.txt)
-[![Latest Tag](https://img.shields.io/github/tag/Torchmind/CIDRUtility.svg?style=flat-square&label=Latest Tag)](https://github.com/Torchmind/CIDRUtility/tags)
-[![Latest Release](https://img.shields.io/github/release/Torchmind/CIDRUtility.svg?style=flat-square&label=Latest Release)](https://github.com/Torchmind/CIDRUtility/releases)
+[![Maven Central](https://img.shields.io/maven-central/v/com.torchmind.utility/version.svg?style=flat-square)](https://search.maven.org/#search%7Cga%7C1%7Cg%3Acom.torchmind.utility%20a%3Acidr)
+[![GitHub Release](https://img.shields.io/github/release/Torchmind/CIDRUtility.svg?style=flat-square)](https://github.com/Torchmind/CIDRUtility/releases)
+[![CircleCI](https://img.shields.io/circleci/project/github/Torchmind/CIDRUtility.svg?style=flat-square)](https://circleci.com/gh/Torchmind/CIDRUtility)
 
 CIDR Notation Utility
 =====================
@@ -21,7 +22,7 @@ Provides POJO representations for the CIDR notation.
 Contacts
 --------
 
-* [IRC #Akkarin on irc.spi.gt](http://irc.spi.gt/iris/?nick=Guest....&channels=Akkarin&prompt=1) (alternatively #Akkarin on esper.net)
+* [#.start](http://webchat.esper.net/?channels=.start&prompt=1) on EsperNet
 * [GitHub](https://github.com/Torchmind/CIDRUtility)
 
 Using
@@ -30,33 +31,28 @@ Using
 When running maven you may simply add a new dependency along with our repository to your ```pom.xml```:
 
 ```xml
-<repository>
-        <id>torchmind</id>
-        <url>https://maven.torchmind.com/snapshot/</url>
-</repository>
-
 <dependencies>
         <dependency>
                 <groupId>com.torchmind.utility</groupId>
                 <artifactId>cidr</artifactId>
-                <version>2.0-SNAPSHOT.1</version>
+                <version>2.1.0</version>
         </dependency>
 </dependencies>
 ```
 
 Loading a configuration file by using the Candle implementation:
 ```java
-CIDRNotation range = CIDRNotation.of ("10.0.0.0/8");
+CIDRNotation range = CIDRNotation.of("10.0.0.0/8");
 
-if (range.matches ("10.13.37.1")) {
-        // Things
+if (range.matches("10.13.37.1")) {
+  // Things
 }
 
 // OR
 
 InetAddress address = ...;
-if (range.matches (address)) {
-        // Things
+if (range.matches(address)) {
+  // Things
 }
 ```
 
