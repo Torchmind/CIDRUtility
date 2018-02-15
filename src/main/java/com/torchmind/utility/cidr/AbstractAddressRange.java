@@ -19,6 +19,7 @@ package com.torchmind.utility.cidr;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.Objects;
 import java.util.Set;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -89,20 +90,16 @@ abstract class AbstractAddressRange<A extends InetAddress> implements AddressRan
    * {@inheritDoc}
    */
   @Override
-  public boolean equals(Object object) {
-    if (this == object) {
+  public boolean equals(Object o) {
+    if (this == o) {
       return true;
     }
-    if (object == null || getClass() != object.getClass()) {
+    if (!(o instanceof AbstractAddressRange)) {
       return false;
     }
-
-    AbstractAddressRange<?> that = (AbstractAddressRange<?>) object;
-
-    if (prefixLength != that.prefixLength) {
-      return false;
-    }
-    return base.equals(that.base);
+    AbstractAddressRange<?> that = (AbstractAddressRange<?>) o;
+    return this.prefixLength == that.prefixLength &&
+        Objects.equals(this.base, that.base);
   }
 
   /**
@@ -110,9 +107,7 @@ abstract class AbstractAddressRange<A extends InetAddress> implements AddressRan
    */
   @Override
   public int hashCode() {
-    int result = base.hashCode();
-    result = 31 * result + prefixLength;
-    return result;
+    return Objects.hash(this.base, this.prefixLength);
   }
 
   /**
