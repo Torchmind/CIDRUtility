@@ -16,9 +16,8 @@
  */
 package com.torchmind.utility.cidr;
 
+import edu.umd.cs.findbugs.annotations.NonNull;
 import java.net.Inet4Address;
-import javax.annotation.Nonnegative;
-import javax.annotation.Nonnull;
 
 /**
  * Provides a CIDR notation implementation for IPv4 address ranges.
@@ -27,16 +26,16 @@ import javax.annotation.Nonnull;
  */
 public final class CIDR4Notation extends AbstractCIDRNotation<Inet4Address> {
 
-  protected CIDR4Notation(@Nonnull Inet4Address base, @Nonnegative int prefixLength) {
+  protected CIDR4Notation(@NonNull Inet4Address base, int prefixLength) {
     super(base, prefixLength);
   }
 
   /**
    * {@inheritDoc}
    */
-  @Nonnull
+  @NonNull
   @Override
-  public CIDRNotation base(@Nonnull Inet4Address base) {
+  public CIDRNotation base(@NonNull Inet4Address base) {
     return (new CIDR4Notation(base, this.prefixLength()));
   }
 
@@ -51,7 +50,7 @@ public final class CIDR4Notation extends AbstractCIDRNotation<Inet4Address> {
   /**
    * {@inheritDoc}
    */
-  @Nonnull
+  @NonNull
   @Override
   public byte[] encoded() {
     return this.encoded(4);
@@ -60,9 +59,9 @@ public final class CIDR4Notation extends AbstractCIDRNotation<Inet4Address> {
   /**
    * {@inheritDoc}
    */
-  @Nonnull
+  @NonNull
   @Override
-  public CIDRNotation prefixLength(@Nonnegative int prefixLength) {
+  public CIDRNotation prefixLength(int prefixLength) {
     return (new CIDR4Notation(this.base(), prefixLength));
   }
 }

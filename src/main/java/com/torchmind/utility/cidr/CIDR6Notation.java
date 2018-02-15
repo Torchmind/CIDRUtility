@@ -16,9 +16,8 @@
  */
 package com.torchmind.utility.cidr;
 
+import edu.umd.cs.findbugs.annotations.NonNull;
 import java.net.Inet6Address;
-import javax.annotation.Nonnegative;
-import javax.annotation.Nonnull;
 
 /**
  * Provides a CIDR notation implementation for IPv6 address ranges.
@@ -27,16 +26,16 @@ import javax.annotation.Nonnull;
  */
 public final class CIDR6Notation extends AbstractCIDRNotation<Inet6Address> {
 
-  protected CIDR6Notation(@Nonnull Inet6Address base, @Nonnegative int prefixLength) {
+  protected CIDR6Notation(@NonNull Inet6Address base, int prefixLength) {
     super(base, prefixLength);
   }
 
   /**
    * {@inheritDoc}
    */
-  @Nonnull
+  @NonNull
   @Override
-  public CIDRNotation base(@Nonnull Inet6Address base) {
+  public CIDRNotation base(@NonNull Inet6Address base) {
     return (new CIDR6Notation(base, this.prefixLength()));
   }
 
@@ -51,7 +50,7 @@ public final class CIDR6Notation extends AbstractCIDRNotation<Inet6Address> {
   /**
    * {@inheritDoc}
    */
-  @Nonnull
+  @NonNull
   @Override
   public byte[] encoded() {
     return this.encoded(8);
@@ -60,9 +59,9 @@ public final class CIDR6Notation extends AbstractCIDRNotation<Inet6Address> {
   /**
    * {@inheritDoc}
    */
-  @Nonnull
+  @NonNull
   @Override
-  public CIDRNotation prefixLength(@Nonnegative int prefixLength) {
+  public CIDRNotation prefixLength(int prefixLength) {
     return (new CIDR6Notation(this.base(), prefixLength));
   }
 }

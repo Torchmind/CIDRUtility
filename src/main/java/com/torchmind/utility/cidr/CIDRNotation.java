@@ -16,22 +16,19 @@
  */
 package com.torchmind.utility.cidr;
 
+import edu.umd.cs.findbugs.annotations.NonNull;
 import java.net.Inet4Address;
 import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Set;
 import java.util.function.Consumer;
-import javax.annotation.Nonnegative;
-import javax.annotation.Nonnull;
-import javax.annotation.concurrent.ThreadSafe;
 
 /**
  * Represents a CIDRNotation range.
  *
  * @author Johannes Donath
  */
-@ThreadSafe
 public interface CIDRNotation {
 
   /**
@@ -42,8 +39,8 @@ public interface CIDRNotation {
    * @throws IllegalArgumentException when the mask is invalid.
    * @throws UnknownHostException when the system cannot find the address.
    */
-  @Nonnull
-  static CIDRNotation of(@Nonnull String address)
+  @NonNull
+  static CIDRNotation of(@NonNull String address)
       throws IllegalArgumentException, UnknownHostException {
     int lengthOffset = address.indexOf('/');
 
@@ -65,8 +62,8 @@ public interface CIDRNotation {
    * @throws IllegalArgumentException when the address type, address or resulting mask is invalid.
    * @throws UnknownHostException when the passed address cannot be resolved.
    */
-  @Nonnull
-  static CIDRNotation of(@Nonnull String address, @Nonnegative int prefixLength)
+  @NonNull
+  static CIDRNotation of(@NonNull String address, int prefixLength)
       throws IllegalArgumentException, UnknownHostException {
     return of(InetAddress.getByName(address), prefixLength);
   }
@@ -79,8 +76,8 @@ public interface CIDRNotation {
    * @return the notation.
    * @throws IllegalArgumentException when the address type or resulting mask is invalid.
    */
-  @Nonnull
-  static CIDRNotation of(@Nonnull InetAddress address, @Nonnegative int prefixLength)
+  @NonNull
+  static CIDRNotation of(@NonNull InetAddress address, int prefixLength)
       throws IllegalArgumentException {
     if (address instanceof Inet4Address) {
       return of(((Inet4Address) address), prefixLength);
@@ -101,8 +98,8 @@ public interface CIDRNotation {
    * @return the notation.
    * @throws IllegalArgumentException when the resulting mask is invalid.
    */
-  @Nonnull
-  static CIDR4Notation of(@Nonnull Inet4Address address, @Nonnegative int prefixLength) {
+  @NonNull
+  static CIDR4Notation of(@NonNull Inet4Address address, int prefixLength) {
     if (prefixLength == -1) {
       prefixLength = 32;
     }
@@ -118,8 +115,8 @@ public interface CIDRNotation {
    * @return the notation.
    * @throws IllegalArgumentException when the resulting mask is invalid.
    */
-  @Nonnull
-  static CIDR6Notation of(@Nonnull Inet6Address address, @Nonnegative int prefixLength) {
+  @NonNull
+  static CIDR6Notation of(@NonNull Inet6Address address, int prefixLength) {
     if (prefixLength == -1) {
       prefixLength = 64;
     }
@@ -132,7 +129,7 @@ public interface CIDRNotation {
    *
    * @return the address.
    */
-  @Nonnull
+  @NonNull
   InetAddress base();
 
   /**
@@ -140,7 +137,6 @@ public interface CIDRNotation {
    *
    * @return the size.
    */
-  @Nonnegative
   long blockSize();
 
   /**
@@ -148,7 +144,7 @@ public interface CIDRNotation {
    *
    * @return the bytes.
    */
-  @Nonnull
+  @NonNull
   byte[] encoded();
 
   /**
@@ -157,7 +153,7 @@ public interface CIDRNotation {
    * @param address the address.
    * @return {@code true} if the address matches, {@code false} otherwise.
    */
-  boolean matches(@Nonnull InetAddress address);
+  boolean matches(@NonNull InetAddress address);
 
   /**
    * Checks whether an address matches.
@@ -167,7 +163,7 @@ public interface CIDRNotation {
    * @throws IllegalArgumentException when an invalid address was supplied.
    * @throws UnknownHostException when an unknown host was supplied.
    */
-  boolean matches(@Nonnull String address) throws IllegalArgumentException, UnknownHostException;
+  boolean matches(@NonNull String address) throws IllegalArgumentException, UnknownHostException;
 
   /**
    * Checks whether an address matches and calls {@code consumer} if so.
@@ -177,8 +173,8 @@ public interface CIDRNotation {
    * @param <T> the address type.
    * @return the CIDRNotation.
    */
-  @Nonnull
-  <T extends InetAddress> CIDRNotation matches(@Nonnull T address, @Nonnull Consumer<T> consumer);
+  @NonNull
+  <T extends InetAddress> CIDRNotation matches(@NonNull T address, @NonNull Consumer<T> consumer);
 
   /**
    * Checks whether an address matches andd calls {@code consumer} if so.
@@ -189,8 +185,8 @@ public interface CIDRNotation {
    * @throws IllegalArgumentException when an invalid address was supplied.
    * @throws UnknownHostException when an unknown host was supplied.
    */
-  @Nonnull
-  CIDRNotation matches(@Nonnull String address, @Nonnull Consumer<String> consumer)
+  @NonNull
+  CIDRNotation matches(@NonNull String address, @NonNull Consumer<String> consumer)
       throws IllegalArgumentException, UnknownHostException;
 
   /**
@@ -199,8 +195,8 @@ public interface CIDRNotation {
    * @param addresses the address.
    * @return the result set.
    */
-  @Nonnull
-  Set<InetAddress> matching(@Nonnull Set<InetAddress> addresses);
+  @NonNull
+  Set<InetAddress> matching(@NonNull Set<InetAddress> addresses);
 
   /**
    * Filters a set and passes all matching addresses to {@code consumer}.
@@ -209,16 +205,15 @@ public interface CIDRNotation {
    * @param consumer the consumer.
    * @return the CIDRNotation.
    */
-  @Nonnull
-  CIDRNotation matching(@Nonnull Set<InetAddress> addresses,
-      @Nonnull Consumer<InetAddress> consumer);
+  @NonNull
+  CIDRNotation matching(@NonNull Set<InetAddress> addresses,
+      @NonNull Consumer<InetAddress> consumer);
 
   /**
    * Retrieves the prefix length.
    *
    * @return the length.
    */
-  @Nonnegative
   int prefixLength();
 
   /**
@@ -227,14 +222,14 @@ public interface CIDRNotation {
    * @param prefixLength the prefix length.
    * @return the mutated CIDRNotation.
    */
-  @Nonnull
-  CIDRNotation prefixLength(@Nonnegative int prefixLength);
+  @NonNull
+  CIDRNotation prefixLength(int prefixLength);
 
   /**
    * Retrieves a string representation of the CIDRNotation notation.
    *
    * @return the string.
    */
-  @Nonnull
+  @NonNull
   String toString();
 }

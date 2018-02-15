@@ -16,14 +16,12 @@
  */
 package com.torchmind.utility.cidr;
 
+import edu.umd.cs.findbugs.annotations.NonNull;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Set;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
-import javax.annotation.Nonnegative;
-import javax.annotation.Nonnull;
-import javax.annotation.concurrent.ThreadSafe;
 
 /**
  * Provides an abstract CIDR notation implementation which provides the most basic elements required
@@ -31,13 +29,12 @@ import javax.annotation.concurrent.ThreadSafe;
  *
  * @author Johannes Donath
  */
-@ThreadSafe
 abstract class AbstractCIDRNotation<A extends InetAddress> implements CIDRNotation {
 
   private final A base;
   private final int prefixLength;
 
-  protected AbstractCIDRNotation(@Nonnull A base, @Nonnegative int prefixLength) {
+  protected AbstractCIDRNotation(@NonNull A base, int prefixLength) {
     this.base = base;
     this.prefixLength = prefixLength;
 
@@ -56,7 +53,7 @@ abstract class AbstractCIDRNotation<A extends InetAddress> implements CIDRNotati
    *
    * @return the address.
    */
-  @Nonnull
+  @NonNull
   @Override
   public A base() {
     return this.base;
@@ -68,14 +65,14 @@ abstract class AbstractCIDRNotation<A extends InetAddress> implements CIDRNotati
    * @param base the base.
    * @return the notation.
    */
-  @Nonnull
-  public abstract CIDRNotation base(@Nonnull A base);
+  @NonNull
+  public abstract CIDRNotation base(@NonNull A base);
 
   /**
    * {@inheritDoc}
    */
-  @Nonnull
-  protected byte[] encoded(@Nonnegative int size) {
+  @NonNull
+  protected byte[] encoded(int size) {
     byte[] encoded = new byte[size];
 
     for (int i = 0; i < this.prefixLength(); i++) {
@@ -122,7 +119,7 @@ abstract class AbstractCIDRNotation<A extends InetAddress> implements CIDRNotati
    * {@inheritDoc}
    */
   @Override
-  public boolean matches(@Nonnull InetAddress address) {
+  public boolean matches(@NonNull InetAddress address) {
     if (!this.base.getClass().isAssignableFrom(address.getClass())) {
       return false;
     }
@@ -143,7 +140,7 @@ abstract class AbstractCIDRNotation<A extends InetAddress> implements CIDRNotati
    * {@inheritDoc}
    */
   @Override
-  public boolean matches(@Nonnull String address)
+  public boolean matches(@NonNull String address)
       throws IllegalArgumentException, UnknownHostException {
     return this.matches(InetAddress.getByName(address));
   }
@@ -151,10 +148,10 @@ abstract class AbstractCIDRNotation<A extends InetAddress> implements CIDRNotati
   /**
    * {@inheritDoc}
    */
-  @Nonnull
+  @NonNull
   @Override
-  public <T extends InetAddress> CIDRNotation matches(@Nonnull T address,
-      @Nonnull Consumer<T> consumer) {
+  public <T extends InetAddress> CIDRNotation matches(@NonNull T address,
+      @NonNull Consumer<T> consumer) {
     if (this.matches(address)) {
       consumer.accept(address);
     }
@@ -165,9 +162,9 @@ abstract class AbstractCIDRNotation<A extends InetAddress> implements CIDRNotati
   /**
    * {@inheritDoc}
    */
-  @Nonnull
+  @NonNull
   @Override
-  public CIDRNotation matches(@Nonnull String address, @Nonnull Consumer<String> consumer)
+  public CIDRNotation matches(@NonNull String address, @NonNull Consumer<String> consumer)
       throws IllegalArgumentException, UnknownHostException {
     if (this.matches(address)) {
       consumer.accept(address);
@@ -179,9 +176,9 @@ abstract class AbstractCIDRNotation<A extends InetAddress> implements CIDRNotati
   /**
    * {@inheritDoc}
    */
-  @Nonnull
+  @NonNull
   @Override
-  public Set<InetAddress> matching(@Nonnull Set<InetAddress> addresses) {
+  public Set<InetAddress> matching(@NonNull Set<InetAddress> addresses) {
     return addresses.stream()
         .filter(this::matches)
         .collect(Collectors.toSet());
@@ -190,10 +187,10 @@ abstract class AbstractCIDRNotation<A extends InetAddress> implements CIDRNotati
   /**
    * {@inheritDoc}
    */
-  @Nonnull
+  @NonNull
   @Override
-  public CIDRNotation matching(@Nonnull Set<InetAddress> addresses,
-      @Nonnull Consumer<InetAddress> consumer) {
+  public CIDRNotation matching(@NonNull Set<InetAddress> addresses,
+      @NonNull Consumer<InetAddress> consumer) {
     addresses.stream()
         .filter(this::matches)
         .forEach(consumer);
@@ -212,7 +209,7 @@ abstract class AbstractCIDRNotation<A extends InetAddress> implements CIDRNotati
   /**
    * {@inheritDoc}
    */
-  @Nonnull
+  @NonNull
   @Override
   public String toString() {
     return this.base().getHostAddress() + "/" + this.prefixLength();
