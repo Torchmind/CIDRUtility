@@ -160,16 +160,19 @@
             <version>9</version>
           </jdkToolchain>
 
-          <source>1.8</source>
           <release>8</release>
+          <source>1.8</source>
+          <target>1.8</target>
         </configuration>
 
         <executions>
           <execution>
             <id>default-compile</id>
+
             <configuration>
-              <source>9</source>
               <release>9</release>
+              <source>9</source>
+              <target>9</target>
             </configuration>
           </execution>
           <execution>
