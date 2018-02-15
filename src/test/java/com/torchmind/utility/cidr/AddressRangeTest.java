@@ -25,7 +25,7 @@ import java.util.function.Function;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 /**
  * Provides test cases for {@link AddressRange} and all of it's implementations.
