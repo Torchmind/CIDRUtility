@@ -43,7 +43,7 @@ abstract class AbstractAddressRange<A extends InetAddress> implements AddressRan
 
     for (int i = 0; i < mask.length; i++) {
       if ((encoded[i] & (~mask[i])) != 0x0) {
-        throw new IllegalArgumentException("Invalid CIDR mask: Base address is not part of block");
+        throw new IllegalArgumentException("Invalid address range: Base address is not part of block");
       }
     }
   }
