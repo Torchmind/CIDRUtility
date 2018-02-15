@@ -17,6 +17,7 @@
 package com.torchmind.utility.cidr;
 
 import java.net.Inet4Address;
+import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.function.BiConsumer;
@@ -129,6 +130,36 @@ public class AddressRangeTest {
     Assert.assertEquals(4L, AddressRange.of("255.255.255.252/30").blockSize());
     Assert.assertEquals(2L, AddressRange.of("255.255.255.254/31").blockSize());
     Assert.assertEquals(1L, AddressRange.of("255.255.255.255/32").blockSize());
+
+    Assert.assertEquals(1L,
+        AddressRange.of("1000:0000:0000:0000:0000:0000:0000:0000/128").blockSize());
+    Assert.assertEquals(2L,
+        AddressRange.of("1000:0000:0000:0000:0000:0000:0000:0000/127").blockSize());
+    Assert.assertEquals(4L,
+        AddressRange.of("1000:0000:0000:0000:0000:0000:0000:0000/126").blockSize());
+    Assert.assertEquals(8L,
+        AddressRange.of("1000:0000:0000:0000:0000:0000:0000:0000/125").blockSize());
+    Assert.assertEquals(16L,
+        AddressRange.of("1000:0000:0000:0000:0000:0000:0000:0000/124").blockSize());
+    Assert.assertEquals(32L,
+        AddressRange.of("1000:0000:0000:0000:0000:0000:0000:0000/123").blockSize());
+    Assert.assertEquals(64L,
+        AddressRange.of("1000:0000:0000:0000:0000:0000:0000:0000/122").blockSize());
+    Assert.assertEquals(128L,
+        AddressRange.of("1000:0000:0000:0000:0000:0000:0000:0000/121").blockSize());
+
+    Assert.assertEquals(256L,
+        AddressRange.of("1000:0000:0000:0000:0000:0000:0000:0000/120").blockSize());
+    Assert.assertEquals(512L,
+        AddressRange.of("1000:0000:0000:0000:0000:0000:0000:0000/119").blockSize());
+    Assert.assertEquals(1024L,
+        AddressRange.of("1000:0000:0000:0000:0000:0000:0000:0000/118").blockSize());
+    Assert.assertEquals(2048L,
+        AddressRange.of("1000:0000:0000:0000:0000:0000:0000:0000/117").blockSize());
+    Assert.assertEquals(4096L,
+        AddressRange.of("1000:0000:0000:0000:0000:0000:0000:0000/116").blockSize());
+    Assert.assertEquals(8192L,
+        AddressRange.of("1000:0000:0000:0000:0000:0000:0000:0000/115").blockSize());
   }
 
   /**
@@ -146,6 +177,8 @@ public class AddressRangeTest {
     AddressRange range07 = AddressRange.of("10.10.10.10/32");
     AddressRange range08 = AddressRange.of("127.0.0.0/31");
     AddressRange range09 = AddressRange.of("127.0.0.0/31");
+    AddressRange range10 = AddressRange.of("0000:0000:0000:0000:0000:0000:0000:0001/128");
+    AddressRange range11 = AddressRange.of("0000:0000:0000:0000:0000:0000:0000:0001/128");
 
     {
       AddressRange current = range00;
@@ -160,6 +193,8 @@ public class AddressRangeTest {
       Assert.assertNotEquals(current, range07);
       Assert.assertNotEquals(current, range08);
       Assert.assertNotEquals(current, range09);
+      Assert.assertNotEquals(current, range10);
+      Assert.assertNotEquals(current, range11);
     }
 
     {
@@ -174,7 +209,8 @@ public class AddressRangeTest {
       Assert.assertNotEquals(current, range06);
       Assert.assertNotEquals(current, range07);
       Assert.assertNotEquals(current, range08);
-      Assert.assertNotEquals(current, range09);
+      Assert.assertNotEquals(current, range10);
+      Assert.assertNotEquals(current, range11);
     }
 
     {
@@ -190,6 +226,8 @@ public class AddressRangeTest {
       Assert.assertNotEquals(current, range07);
       Assert.assertNotEquals(current, range08);
       Assert.assertNotEquals(current, range09);
+      Assert.assertNotEquals(current, range10);
+      Assert.assertNotEquals(current, range11);
     }
 
     {
@@ -205,6 +243,8 @@ public class AddressRangeTest {
       Assert.assertNotEquals(current, range07);
       Assert.assertNotEquals(current, range08);
       Assert.assertNotEquals(current, range09);
+      Assert.assertNotEquals(current, range10);
+      Assert.assertNotEquals(current, range11);
     }
 
     {
@@ -220,6 +260,8 @@ public class AddressRangeTest {
       Assert.assertNotEquals(current, range07);
       Assert.assertNotEquals(current, range08);
       Assert.assertNotEquals(current, range09);
+      Assert.assertNotEquals(current, range10);
+      Assert.assertNotEquals(current, range11);
     }
 
     {
@@ -235,6 +277,8 @@ public class AddressRangeTest {
       Assert.assertNotEquals(current, range07);
       Assert.assertNotEquals(current, range08);
       Assert.assertNotEquals(current, range09);
+      Assert.assertNotEquals(current, range10);
+      Assert.assertNotEquals(current, range11);
     }
 
     {
@@ -250,6 +294,8 @@ public class AddressRangeTest {
       Assert.assertEquals(current, range07);
       Assert.assertNotEquals(current, range08);
       Assert.assertNotEquals(current, range09);
+      Assert.assertNotEquals(current, range10);
+      Assert.assertNotEquals(current, range11);
     }
 
     {
@@ -265,6 +311,8 @@ public class AddressRangeTest {
       Assert.assertEquals(current, range07);
       Assert.assertNotEquals(current, range08);
       Assert.assertNotEquals(current, range09);
+      Assert.assertNotEquals(current, range10);
+      Assert.assertNotEquals(current, range11);
     }
 
     {
@@ -280,6 +328,8 @@ public class AddressRangeTest {
       Assert.assertNotEquals(current, range07);
       Assert.assertEquals(current, range08);
       Assert.assertEquals(current, range09);
+      Assert.assertNotEquals(current, range10);
+      Assert.assertNotEquals(current, range11);
     }
 
     {
@@ -295,6 +345,42 @@ public class AddressRangeTest {
       Assert.assertNotEquals(current, range07);
       Assert.assertEquals(current, range08);
       Assert.assertEquals(current, range09);
+      Assert.assertNotEquals(current, range10);
+      Assert.assertNotEquals(current, range11);
+    }
+
+    {
+      AddressRange current = range10;
+
+      Assert.assertNotEquals(current, range00);
+      Assert.assertNotEquals(current, range01);
+      Assert.assertNotEquals(current, range02);
+      Assert.assertNotEquals(current, range03);
+      Assert.assertNotEquals(current, range04);
+      Assert.assertNotEquals(current, range05);
+      Assert.assertNotEquals(current, range06);
+      Assert.assertNotEquals(current, range07);
+      Assert.assertNotEquals(current, range08);
+      Assert.assertNotEquals(current, range09);
+      Assert.assertEquals(current, range10);
+      Assert.assertEquals(current, range11);
+    }
+
+    {
+      AddressRange current = range11;
+
+      Assert.assertNotEquals(current, range00);
+      Assert.assertNotEquals(current, range01);
+      Assert.assertNotEquals(current, range02);
+      Assert.assertNotEquals(current, range03);
+      Assert.assertNotEquals(current, range04);
+      Assert.assertNotEquals(current, range05);
+      Assert.assertNotEquals(current, range06);
+      Assert.assertNotEquals(current, range07);
+      Assert.assertNotEquals(current, range08);
+      Assert.assertNotEquals(current, range09);
+      Assert.assertEquals(current, range10);
+      Assert.assertEquals(current, range11);
     }
   }
 
@@ -308,6 +394,7 @@ public class AddressRangeTest {
     AddressRange range03 = AddressRange.of("10.10.10.0/24");
     AddressRange range04 = AddressRange.of("10.10.10.10/32");
     AddressRange range05 = AddressRange.of("127.0.0.0/31");
+    AddressRange range06 = AddressRange.of("0000:0000:0000:0000:0000:0000:0000:0000/125");
 
     Inet4Address address01 = ((Inet4Address) InetAddress.getByName("10.0.0.0"));
     Inet4Address address02 = ((Inet4Address) InetAddress.getByName("10.0.0.1"));
@@ -328,6 +415,41 @@ public class AddressRangeTest {
     Inet4Address address14 = ((Inet4Address) InetAddress.getByName("127.0.0.0"));
     Inet4Address address15 = ((Inet4Address) InetAddress.getByName("127.0.0.1"));
     Inet4Address address16 = ((Inet4Address) InetAddress.getByName("127.0.0.2"));
+
+    Inet6Address address17 = ((Inet6Address) InetAddress
+        .getByName("0000:0000:0000:0000:0000:0000:0000:0001")); // 128
+    Inet6Address address18 = ((Inet6Address) InetAddress
+        .getByName("0000:0000:0000:0000:0000:0000:0000:0002")); // 127
+    Inet6Address address19 = ((Inet6Address) InetAddress
+        .getByName("0000:0000:0000:0000:0000:0000:0000:0003"));
+    Inet6Address address20 = ((Inet6Address) InetAddress
+        .getByName("0000:0000:0000:0000:0000:0000:0000:0004")); // 126
+    Inet6Address address21 = ((Inet6Address) InetAddress
+        .getByName("0000:0000:0000:0000:0000:0000:0000:0005"));
+    Inet6Address address22 = ((Inet6Address) InetAddress
+        .getByName("0000:0000:0000:0000:0000:0000:0000:0006"));
+    Inet6Address address23 = ((Inet6Address) InetAddress
+        .getByName("0000:0000:0000:0000:0000:0000:0000:0007"));
+    Inet6Address address24 = ((Inet6Address) InetAddress
+        .getByName("0000:0000:0000:0000:0000:0000:0000:0007")); // 125
+    Inet6Address address25 = ((Inet6Address) InetAddress
+        .getByName("0000:0000:0000:0000:0000:0000:0000:0008"));
+    Inet6Address address26 = ((Inet6Address) InetAddress
+        .getByName("0000:0000:0000:0000:0000:0000:0000:0009"));
+    Inet6Address address27 = ((Inet6Address) InetAddress
+        .getByName("0000:0000:0000:0000:0000:0000:0000:000A"));
+    Inet6Address address28 = ((Inet6Address) InetAddress
+        .getByName("0000:0000:0000:0000:0000:0000:0000:000B"));
+    Inet6Address address29 = ((Inet6Address) InetAddress
+        .getByName("0000:0000:0000:0000:0000:0000:0000:000C"));
+    Inet6Address address30 = ((Inet6Address) InetAddress
+        .getByName("0000:0000:0000:0000:0000:0000:0000:000D"));
+    Inet6Address address31 = ((Inet6Address) InetAddress
+        .getByName("0000:0000:0000:0000:0000:0000:0000:000E"));
+    Inet6Address address32 = ((Inet6Address) InetAddress
+        .getByName("0000:0000:0000:0000:0000:0000:0000:000F"));
+    Inet6Address address33 = ((Inet6Address) InetAddress
+        .getByName("0000:0000:0000:0000:0000:0000:0000:0010")); // 124
 
     {
       AddressRange currentRange = range01;
@@ -448,6 +570,28 @@ public class AddressRangeTest {
       Assert.assertTrue(currentRange.matches(address15));
       Assert.assertFalse(currentRange.matches(address16));
     }
+
+    {
+      AddressRange currentRange = range06;
+
+      Assert.assertTrue(currentRange.matches(address17));
+      Assert.assertTrue(currentRange.matches(address18));
+      Assert.assertTrue(currentRange.matches(address19));
+      Assert.assertTrue(currentRange.matches(address20));
+      Assert.assertTrue(currentRange.matches(address21));
+      Assert.assertTrue(currentRange.matches(address22));
+      Assert.assertTrue(currentRange.matches(address23));
+      Assert.assertTrue(currentRange.matches(address24));
+      Assert.assertFalse(currentRange.matches(address25));
+      Assert.assertFalse(currentRange.matches(address26));
+      Assert.assertFalse(currentRange.matches(address27));
+      Assert.assertFalse(currentRange.matches(address28));
+      Assert.assertFalse(currentRange.matches(address29));
+      Assert.assertFalse(currentRange.matches(address30));
+      Assert.assertFalse(currentRange.matches(address31));
+      Assert.assertFalse(currentRange.matches(address32));
+      Assert.assertFalse(currentRange.matches(address33));
+    }
   }
 
   /**
@@ -455,10 +599,12 @@ public class AddressRangeTest {
    */
   @Test
   public void testParse() throws UnknownHostException {
-    AddressRange4 address00 = ((AddressRange4) AddressRange.of("10.0.0.0/8"));
-    AddressRange4 address01 = ((AddressRange4) AddressRange.of("10.10.0.0/16"));
-    AddressRange4 address02 = ((AddressRange4) AddressRange.of("10.10.10.0/24"));
-    AddressRange4 address03 = ((AddressRange4) AddressRange.of("10.10.10.10/32"));
+    AddressRange4 address00 = (AddressRange4) AddressRange.of("10.0.0.0/8");
+    AddressRange4 address01 = (AddressRange4) AddressRange.of("10.10.0.0/16");
+    AddressRange4 address02 = (AddressRange4) AddressRange.of("10.10.10.0/24");
+    AddressRange4 address03 = (AddressRange4) AddressRange.of("10.10.10.10/32");
+    AddressRange6 address04 = (AddressRange6) AddressRange
+        .of("0000:0000:0000:0000:0000:0000:0000:0001/128");
 
     {
       Assert.assertEquals(InetAddress.getByName("10.0.0.0"), address00.base());
@@ -479,6 +625,12 @@ public class AddressRangeTest {
       Assert.assertEquals(InetAddress.getByName("10.10.10.10"), address03.base());
       Assert.assertEquals(32, address03.prefixLength());
     }
+
+    {
+      Assert.assertEquals(InetAddress.getByName("0000:0000:0000:0000:0000:0000:0000:0001"),
+          address04.base());
+      Assert.assertEquals(128, address04.prefixLength());
+    }
   }
 
   /**
@@ -491,5 +643,7 @@ public class AddressRangeTest {
     Assert.assertEquals("10.10.10.0/24", AddressRange.of("10.10.10.0/24").toString());
     Assert.assertEquals("10.10.10.10/32", AddressRange.of("10.10.10.10/32").toString());
     Assert.assertEquals("127.0.0.0/31", AddressRange.of("127.0.0.0/31").toString());
+    Assert.assertEquals("0:0:0:0:0:0:0:1/128",
+        AddressRange.of("0000:0000:0000:0000:0000:0000:0000:0001/128").toString());
   }
 }
