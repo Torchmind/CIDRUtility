@@ -30,8 +30,7 @@ import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 
 /**
- * Provides test cases for {@link com.torchmind.utility.cidr.CIDRNotation} and all of it's
- * implementations.
+ * Provides test cases for {@link CIDRNotation} and all of it's implementations.
  *
  * @author Johannes Donath
  */
@@ -39,11 +38,11 @@ import org.mockito.runners.MockitoJUnitRunner;
 public class CIDRNotationTest {
 
   /**
-   * Tests whether {@link com.torchmind.utility.cidr.AbstractCIDRNotation#AbstractCIDRNotation(java.net.InetAddress,
+   * Tests whether {@link com.torchmind.utility.cidr.AbstractCIDRNotation#AbstractCIDRNotation(InetAddress,
    * int)} verifies passed masks correctly.
    */
   @Test
-  public void testBaseVerification() throws UnknownHostException {
+  public void testBaseVerification() {
     BiConsumer<String, Boolean> verify = (m, b) -> {
       try {
 
@@ -91,7 +90,7 @@ public class CIDRNotationTest {
   }
 
   /**
-   * Tests {@link com.torchmind.utility.cidr.CIDRNotation#blockSize()}.
+   * Tests {@link CIDRNotation#blockSize()}.
    */
   @Test
   public void testBlockSize() throws UnknownHostException {
@@ -135,7 +134,7 @@ public class CIDRNotationTest {
   }
 
   /**
-   * Tests {@link com.torchmind.utility.cidr.CIDRNotation#equals(Object)}.
+   * Tests {@link CIDRNotation#equals(Object)}.
    */
   @Test
   public void testEquals() throws UnknownHostException {
@@ -302,7 +301,7 @@ public class CIDRNotationTest {
   }
 
   /**
-   * Tests {@link com.torchmind.utility.cidr.CIDRNotation#matches(java.net.InetAddress)}.
+   * Tests {@link CIDRNotation#matches(InetAddress)}.
    */
   @Test
   public void testMatch() throws UnknownHostException {
@@ -454,7 +453,7 @@ public class CIDRNotationTest {
   }
 
   /**
-   * Tests {@link com.torchmind.utility.cidr.CIDRNotation#of(String)}.
+   * Tests {@link CIDRNotation#of(String)}.
    */
   @Test
   public void testParse() throws UnknownHostException {
@@ -485,7 +484,7 @@ public class CIDRNotationTest {
   }
 
   /**
-   * Tests {@link com.torchmind.utility.cidr.CIDRNotation#toString()}.
+   * Tests {@link CIDRNotation#toString()}.
    */
   @Test
   public void testToString() throws UnknownHostException {
